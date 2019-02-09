@@ -57,11 +57,43 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "#generate-1",
+    "location": "#generate_t-1",
     "page": "Functions",
-    "title": "generate",
+    "title": "generate_t",
     "category": "section",
     "text": "generate_t_(; sd=script_dict_t)\ngenerate_t(chapter::AbstractString; sd=script_dict_t_)\ngenerate_t(chapter::AbstractString, scriptfile::AbstractString; sd=script_dict_t_)"
+},
+
+{
+    "location": "#StatisticalRethinking.ScriptEntry",
+    "page": "Functions",
+    "title": "StatisticalRethinking.ScriptEntry",
+    "category": "type",
+    "text": "ScriptEntry\n\nDefine processing requirements for chapter scripts\n\nConstructor\n\nscriptentry(scriptfile;; nb=true, exe=true, doc=true)\n\nRequired arguments\n\n* `scriptfile::AbstractString`        : Script file\n\nOptional arguments\n\n* `nb::Bool`      : Generate a notebook version in notebooks directory\n* `exe::Bool`     : Execute the notebook (for testing or documentation purposes)\n* `doc::Bool`     : Insert documention into Github pages\n\nIf exe = false and doc = true it is assumed the appropriate .md files have been manually created and stored in docs/src/nn/... (Travis will terminate if runs take too long).\n\n\n\n\n\n"
+},
+
+{
+    "location": "#ScriptEntry-1",
+    "page": "Functions",
+    "title": "ScriptEntry",
+    "category": "section",
+    "text": "ScriptEntry"
+},
+
+{
+    "location": "#StatisticalRethinking.scriptentry-Tuple{Any}",
+    "page": "Functions",
+    "title": "StatisticalRethinking.scriptentry",
+    "category": "method",
+    "text": "scriptentry\n\nConstructor for ScriptEntry objects.\n\nConstructor\n\nscriptentry(scriptfile;; nb=true, exe=true, doc=true)\n\nRequired arguments\n\n* `scriptfile::AbstractString`        : Script file\n\nOptional arguments\n\n* `nb::Bool`      : Generate a notebook version in notebooks directory\n* `exe::Bool`     : Execute the notebook (for testing or documentation purposes)\n* `doc::Bool`     : Insert documention into Github pages\n\nIf exe = false and doc = true it is assumed the appropriate .md files have been manually created and stored in docs/src/nn/... (Travis will terminate if runs take too long).\n\n\n\n\n\n"
+},
+
+{
+    "location": "#scriptentry-1",
+    "page": "Functions",
+    "title": "scriptentry",
+    "category": "section",
+    "text": "scriptentry(scriptfile; nb = true, exe = true, doc = true)"
 },
 
 ]}
