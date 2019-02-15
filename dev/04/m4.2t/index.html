@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>m4.2t · TuringModels.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link href="../../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>TuringModels.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../../intro/">Home</a></li><li><span class="toctext">Chapter 02</span><ul><li><a class="toctext" href="../../02/m2.1t/">m2.1t</a></li></ul></li><li><span class="toctext">Chapter 04</span><ul><li class="current"><a class="toctext" href>m4.2t</a><ul class="internal"></ul></li></ul></li><li><span class="toctext">Chapter 08</span></li><li><span class="toctext">Chapter 10</span></li><li><span class="toctext">Chapter 11</span></li><li><span class="toctext">Chapter 12</span></li><li><a class="toctext" href="../../">Functions</a></li></ul></nav><article id="docs"><header><nav><ul><li>Chapter 04</li><li><a href>m4.2t</a></li></ul><a class="edit-page" href="https://github.com/StatisticalRethinkingJulia/TuringModels.jl/blob/master/docs/src/04/m4.2t.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>m4.2t</span><a class="fa fa-bars" href="#"></a></div></header><pre><code class="language-julia">using TuringModels, MCMCChain
+gr(size=(500,500));
+
+Turing.setadbackend(:reverse_diff);
+Turing.turnprogress(false);
+
+ProjDir = rel_path_t(&quot;..&quot;, &quot;scripts&quot;, &quot;04&quot;)
+cd(ProjDir)</code></pre><pre><code class="language-none">loaded
+
+
+┌ Info: [Turing]: global PROGRESS is set as false
+└ @ Turing /Users/rob/.julia/packages/Turing/FTRCE/src/Turing.jl:24</code></pre><h3><a class="nav-anchor" id="snippet-4.43-1" href="#snippet-4.43-1">snippet 4.43</a></h3><pre><code class="language-julia">howell1 = CSV.read(rel_path(&quot;..&quot;, &quot;data&quot;, &quot;Howell1.csv&quot;), delim=&#39;;&#39;)
+df = convert(DataFrame, howell1);</code></pre><p>Use only adults and center the weight observations</p><pre><code class="language-julia">df2 = filter(row -&gt; row[:age] &gt;= 18, df);
+mean_weight = mean(df2[:weight]);
+df2[:weight_c] = df2[:weight] .- mean_weight;
+first(df2, 5)</code></pre><p>&lt;table class=&quot;data-frame&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;height&lt;/th&gt;&lt;th&gt;weight&lt;/th&gt;&lt;th&gt;age&lt;/th&gt;&lt;th&gt;male&lt;/th&gt;&lt;th&gt;weight_c&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;Float64⍰&lt;/th&gt;&lt;th&gt;Float64⍰&lt;/th&gt;&lt;th&gt;Float64⍰&lt;/th&gt;&lt;th&gt;Int64⍰&lt;/th&gt;&lt;th&gt;Float64&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;p&gt;5 rows × 5 columns&lt;/p&gt;&lt;tr&gt;&lt;th&gt;1&lt;/th&gt;&lt;td&gt;151.765&lt;/td&gt;&lt;td&gt;47.8256&lt;/td&gt;&lt;td&gt;63.0&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;2.83512&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;2&lt;/th&gt;&lt;td&gt;139.7&lt;/td&gt;&lt;td&gt;36.4858&lt;/td&gt;&lt;td&gt;63.0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;-8.50468&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;3&lt;/th&gt;&lt;td&gt;136.525&lt;/td&gt;&lt;td&gt;31.8648&lt;/td&gt;&lt;td&gt;65.0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;-13.1256&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;4&lt;/th&gt;&lt;td&gt;156.845&lt;/td&gt;&lt;td&gt;53.0419&lt;/td&gt;&lt;td&gt;41.0&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;8.05143&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;5&lt;/th&gt;&lt;td&gt;145.415&lt;/td&gt;&lt;td&gt;41.2769&lt;/td&gt;&lt;td&gt;51.0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;-3.71361&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</p><p>Extract variables for Turing model</p><pre><code class="language-julia">y = convert(Vector{Float64}, df2[:height]);
+x = convert(Vector{Float64}, df2[:weight_c]);</code></pre><p>Define the regression model</p><pre><code class="language-julia">@model line(y, x) = begin
+    #priors
+    alpha ~ Normal(178.0, 100.0)
+    beta ~ Normal(0.0, 10.0)
+    s ~ Uniform(0, 50)
+
+    #model
+    mu = alpha .+ beta*x
+    for i in 1:length(y)
+      y[i] ~ Normal(mu[i], s)
+    end
+end;</code></pre><p>Draw the samples</p><pre><code class="language-julia">samples = 2000
+adapt_cycles = 1000
+
+@time chn = sample(line(y, x), Turing.NUTS(samples, adapt_cycles, 0.65));
+draws = adapt_cycles+1:samples</code></pre><pre><code class="language-none">┌ Info: [Turing] looking for good initial eps...
+└ @ Turing.Inference /Users/rob/.julia/packages/Turing/FTRCE/src/inference/support/hmc_core.jl:240
+[NUTS{Turing.Core.FluxTrackerAD,Union{}}] found initial ϵ: 0.1
+└ @ Turing.Inference /Users/rob/.julia/packages/Turing/FTRCE/src/inference/support/hmc_core.jl:235
+┌ Warning: 6.327001291052424 exceeds 5.0; capped to 5.0 for numerical stability
+└ @ Turing.Inference /Users/rob/.julia/packages/Turing/FTRCE/src/inference/adapt/stepsize.jl:96
+┌ Info:  Adapted ϵ = 0.051517780320521116, std = [1.0, 1.0, 1.0]; 1000 iterations is used for adaption.
+└ @ Turing.Inference /Users/rob/.julia/packages/Turing/FTRCE/src/inference/adapt/adapt.jl:91
+
+
+[NUTS] Finished with
+  Running time        = 159.94918556499996;
+  #lf / sample        = 0.0;
+  #evals / sample     = 20.008;
+  pre-cond. metric    = [1.0, 1.0, 1.0].
+170.377918 seconds (1.34 G allocations: 87.482 GiB, 15.07% gc time)
+
+
+
+
+
+1001:2000</code></pre><p>Show corrected results (drop adaptation samples)</p><pre><code class="language-julia">chn2 = MCMCChain.Chains(chn.value[draws,:,:], names=chn.names)</code></pre><pre><code class="language-none">Object of type &quot;Chains{Float64}&quot;
+
+Iterations = 1:1000
+Thinning interval = 1
+Chains = 1
+Samples per chain = 1000
+
+Union{Missing, Float64}[154.565 0.941322 … 22.0 0.0515178; 154.916 0.883904 … 34.0 0.0515178; … ; 154.289 0.851291 … 22.0 0.0515178; 154.37 0.937918 … 10.0 0.0515178]</code></pre><p>Look at the proper draws (in corrected chn2)</p><pre><code class="language-julia">describe(chn2)</code></pre><pre><code class="language-none">Iterations = 1:1000
+Thinning interval = 1
+Chains = 1
+Samples per chain = 1000
+
+Empirical Posterior Estimates:
+              Mean                   SD                       Naive SE                      MCSE                ESS    
+   alpha   154.61332796  0.259161915144187238180251 0.0081954193462691650451379 0.0210813303088451635403100  151.128487
+    beta     0.90576261  0.042698830241467457258242 0.0013502555698791454674712 0.0008073661429612670730610 1000.000000
+  lf_num     0.00000000  0.000000000000000000000000 0.0000000000000000000000000 0.0000000000000000000000000         NaN
+       s     5.10082014  0.196183320754445472688943 0.0062038613251943043949699 0.0054795928509070619683019 1000.000000
+ elapsed     0.07116950  0.054788946285877590525182 0.0017325786086399600719604 0.0025559342065862200761572  459.501100
+ epsilon     0.05151778  0.000000000000000013884732 0.0000000000000000004390738 0.0000000000000000023129646   36.036036
+      lp -1083.66705962  1.208537476717588265984205 0.0382173106410029217450131 0.0685026818053934005714467  311.246945
+eval_num    18.60400000 13.295862663398866132524745 0.4204520947313308276704902 0.3685864891718090841088440 1000.000000
+  lf_eps     0.05151778  0.000000000000000013884732 0.0000000000000000004390738 0.0000000000000000023129646   36.036036
+
+Quantiles:
+               2.5%           25.0%           50.0%           75.0%          97.5%    
+   alpha   154.115249976   154.428978890   154.615084568   154.78540763   155.12353252
+    beta     0.823492977     0.874431020     0.906152726     0.93672589     0.98784233
+  lf_num     0.000000000     0.000000000     0.000000000     0.00000000     0.00000000
+       s     4.734281054     4.966697003     5.093838278     5.21369238     5.50648751
+ elapsed     0.011072525     0.033625251     0.039526645     0.10545082     0.18928973
+ epsilon     0.051517780     0.051517780     0.051517780     0.05151778     0.05151778
+      lp -1086.947008681 -1084.227420414 -1083.320255590 -1082.75445198 -1082.31191138
+eval_num     4.000000000    10.000000000    10.000000000    22.00000000    46.00000000
+  lf_eps     0.051517780     0.051517780     0.051517780     0.05151778     0.05151778</code></pre><p>Compare with a previous result</p><pre><code class="language-julia">m4_2s_result = &quot;
+
+Iterations = 1:1000
+Thinning interval = 1
+Chains = 1,2,3,4
+Samples per chain = 1000
+
+Empirical Posterior Estimates:
+         Mean        SD       Naive SE       MCSE      ESS
+alpha 154.597086 0.27326431 0.0043206882 0.0036304132 1000
+ beta   0.906380 0.04143488 0.0006551430 0.0006994720 1000
+sigma   5.106643 0.19345409 0.0030587777 0.0032035103 1000
+
+Quantiles:
+          2.5%       25.0%       50.0%       75.0%       97.5%
+alpha 154.0610000 154.4150000 154.5980000 154.7812500 155.1260000
+ beta   0.8255494   0.8790695   0.9057435   0.9336445   0.9882981
+sigma   4.7524368   4.9683400   5.0994450   5.2353100   5.5090128
+&quot;;</code></pre><p>Plot the regerssion line and observations</p><pre><code class="language-julia">scatter(x, y, lab=&quot;Observations&quot;, xlab=&quot;weight&quot;, ylab=&quot;height&quot;)
+xi = -15.0:0.1:15.0
+yi = mean(chn2.value[:,1,:]) .+ mean(chn2.value[:, 2, :])*xi
+plot!(xi, yi, lab=&quot;Regression line&quot;)</code></pre><p><img src="../output_18_0.svg" alt="svg"/></p><p>Plot the chains</p><pre><code class="language-julia">plot(chn2)</code></pre><pre><code class="language-none">┌ Warning: No strict ticks found
+└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
+┌ Warning: No strict ticks found
+└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173</code></pre><p><img src="../output_20_1.svg" alt="svg"/></p><pre><code class="language-none">┌ Warning: No strict ticks found
+└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
+GKS: Rectangle definition is invalid in routine SET_WINDOW
+GKS: Rectangle definition is invalid in routine SET_WINDOW
+┌ Warning: No strict ticks found
+└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
+GKS: Rectangle definition is invalid in routine SET_WINDOW
+GKS: Rectangle definition is invalid in routine SET_WINDOW
+┌ Warning: No strict ticks found
+└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
+GKS: Rectangle definition is invalid in routine SET_WINDOW
+GKS: Rectangle definition is invalid in routine SET_WINDOW
+┌ Warning: No strict ticks found
+└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
+GKS: Rectangle definition is invalid in routine SET_WINDOW
+GKS: Rectangle definition is invalid in routine SET_WINDOW</code></pre><p>End of <code>m4.2t.jl</code></p><p><em>This notebook was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../../02/m2.1t/"><span class="direction">Previous</span><span class="title">m2.1t</span></a><a class="next" href="../../"><span class="direction">Next</span><span class="title">Functions</span></a></footer></article></body></html>
