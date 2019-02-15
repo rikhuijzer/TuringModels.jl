@@ -73,11 +73,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "#TuringModels.generate_t-Tuple{}",
+    "page": "Functions",
+    "title": "TuringModels.generate_t",
+    "category": "method",
+    "text": "generate_t\n\nUtility function to generate all notebooks and chapters from scripts in the scripts directory.\n\nMethod\n\ngenerate_t(sd = script_dict_t)\n\nRequired arguments\n\nNone, all notebooks/.. and chapters/.. files are regenerated.\n\n\n\n\n\n"
+},
+
+{
+    "location": "#TuringModels.generate_t-Tuple{AbstractString}",
+    "page": "Functions",
+    "title": "TuringModels.generate_t",
+    "category": "method",
+    "text": "generate_t\n\nGenerate notebooks and scripts in a single chapter.\n\nMethod\n\ngenerate_t(chapter::AbstractString)\n\nRequired arguments\n\nGenerate notebooks and scripts in a single chapter, e.g. generate(\"04\")\n\n\n\n\n\n"
+},
+
+{
+    "location": "#TuringModels.generate_t-Tuple{AbstractString,AbstractString}",
+    "page": "Functions",
+    "title": "TuringModels.generate_t",
+    "category": "method",
+    "text": "generate_t\n\nGenerate a single notebook and script\n\nMethod\n\ngenerate_t(chapter::AbstractString, file::AbstractString)\n\nRequired arguments\n\nGenerate notebook and script file in chapter, e.g. generatet(\"04\", \"m4.1d.jl\") or  generatet(\"04/m4.1t.jl\")\n\n\n\n\n\n"
+},
+
+{
     "location": "#generate_t-1",
     "page": "Functions",
     "title": "generate_t",
     "category": "section",
-    "text": "generate_t_(; sd=script_dict_t)\ngenerate_t(chapter::AbstractString; sd=script_dict_t_)\ngenerate_t(chapter::AbstractString, scriptfile::AbstractString; sd=script_dict_t_)"
+    "text": "generate_t(; sd=script_dict_t)\ngenerate_t(chapter::AbstractString; sd=script_dict_t_)\ngenerate_t(chapter::AbstractString, scriptfile::AbstractString; sd=script_dict_t_)"
 },
 
 {
