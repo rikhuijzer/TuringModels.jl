@@ -21,7 +21,15 @@ var documenterSearchIndex = {"docs": [
     "page": "m2.1t",
     "title": "m2.1t",
     "category": "page",
-    "text": "EditURL = \"https://github.com/StatisticalRethinkingJulia/TuringModels.jl/blob/master/scripts/02/m2.1t.jl\"Load Julia packages (libraries) neededusing TuringModels\nusing Optim, Turing, Flux.Tracker\ngr(size=(600,300));Turing.setadbackend(:reverse_diff);"
+    "text": "EditURL = \"https://github.com/StatisticalRethinkingJulia/TuringModels.jl/blob/master/scripts/02/m2.1t.jl\""
+},
+
+{
+    "location": "02/m2.1t/#m2.1t.jl-1",
+    "page": "m2.1t",
+    "title": "m2.1t.jl",
+    "category": "section",
+    "text": "Load Julia packages (libraries) neededusing TuringModels\nusing Optim, Turing, Flux.Tracker\ngr(size=(600,300));Turing.setadbackend(:reverse_diff);"
 },
 
 {
