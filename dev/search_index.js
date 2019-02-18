@@ -157,7 +157,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Functions",
     "title": "maximum_a_posteriori",
     "category": "section",
-    "text": "maximum_a_posteriori(model, lower_bound, upper_bound)link to m2.1t.jl Documentation\nlink to maximum_a_posteriori(model, lower_bound, upper_bound)"
+    "text": "maximum_a_posteriori(model, lower_bound, upper_bound)link to m2.1t.jl\nlink to maximum_a_posteriori(model, lower_bound, upper_bound)"
 },
 
 ]}
