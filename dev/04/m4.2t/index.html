@@ -1,21 +1,36 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>m4.2t · TuringModels.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link href="../../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>TuringModels.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../../intro/">Home</a></li><li><span class="toctext">Chapter 02</span><ul><li><a class="toctext" href="../../02/m2.1t/">m2.1t</a></li></ul></li><li><span class="toctext">Chapter 04</span><ul><li class="current"><a class="toctext" href>m4.2t</a><ul class="internal"></ul></li></ul></li><li><span class="toctext">Chapter 08</span></li><li><span class="toctext">Chapter 10</span></li><li><span class="toctext">Chapter 11</span></li><li><span class="toctext">Chapter 12</span></li><li><a class="toctext" href="../../">Functions</a></li></ul></nav><article id="docs"><header><nav><ul><li>Chapter 04</li><li><a href>m4.2t</a></li></ul><a class="edit-page" href="https://github.com/StatisticalRethinkingJulia/TuringModels.jl/blob/master/docs/src/04/m4.2t.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>m4.2t</span><a class="fa fa-bars" href="#"></a></div></header><pre><code class="language-julia">using TuringModels, MCMCChain
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>m4.2t · TuringModels.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link href="../../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>TuringModels.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../../intro/">Home</a></li><li><span class="toctext">Chapter 02</span><ul><li><a class="toctext" href="../../02/m2.1t/">m2.1t</a></li></ul></li><li><span class="toctext">Chapter 04</span><ul><li class="current"><a class="toctext" href>m4.2t</a><ul class="internal"></ul></li></ul></li><li><span class="toctext">Chapter 08</span></li><li><span class="toctext">Chapter 10</span></li><li><span class="toctext">Chapter 11</span></li><li><span class="toctext">Chapter 12</span></li><li><a class="toctext" href="../../">Functions</a></li></ul></nav><article id="docs"><header><nav><ul><li>Chapter 04</li><li><a href>m4.2t</a></li></ul><a class="edit-page" href="https://github.com/StatisticalRethinkingJulia/TuringModels.jl/blob/master/scripts/04/m4.2t.jl"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>m4.2t</span><a class="fa fa-bars" href="#"></a></div></header><div><pre><code class="language-julia">using TuringModels
 gr(size=(500,500));
 
 Turing.setadbackend(:reverse_diff);
-Turing.turnprogress(false);
 
 ProjDir = rel_path_t(&quot;..&quot;, &quot;scripts&quot;, &quot;04&quot;)
-cd(ProjDir)</code></pre><pre><code class="language-none">loaded
-
-
-┌ Info: [Turing]: global PROGRESS is set as false
-└ @ Turing /Users/rob/.julia/packages/Turing/FTRCE/src/Turing.jl:24</code></pre><h3><a class="nav-anchor" id="snippet-4.43-1" href="#snippet-4.43-1">snippet 4.43</a></h3><pre><code class="language-julia">howell1 = CSV.read(rel_path(&quot;..&quot;, &quot;data&quot;, &quot;Howell1.csv&quot;), delim=&#39;;&#39;)
-df = convert(DataFrame, howell1);</code></pre><p>Use only adults and center the weight observations</p><pre><code class="language-julia">df2 = filter(row -&gt; row[:age] &gt;= 18, df);
+cd(ProjDir)</code></pre></div><h3><a class="nav-anchor" id="snippet-4.43-1" href="#snippet-4.43-1">snippet 4.43</a></h3><div><pre><code class="language-julia">howell1 = CSV.read(rel_path(&quot;..&quot;, &quot;data&quot;, &quot;Howell1.csv&quot;), delim=&#39;;&#39;)
+df = convert(DataFrame, howell1);</code></pre><table class="data-frame"><thead><tr><th></th><th>height</th><th>weight</th><th>age</th><th>male</th></tr><tr><th></th><th>Float64⍰</th><th>Float64⍰</th><th>Float64⍰</th><th>Int64⍰</th></tr></thead><tbody><p>544 rows × 4 columns</p><tr><th>1</th><td>151.765</td><td>47.8256</td><td>63.0</td><td>1</td></tr><tr><th>2</th><td>139.7</td><td>36.4858</td><td>63.0</td><td>0</td></tr><tr><th>3</th><td>136.525</td><td>31.8648</td><td>65.0</td><td>0</td></tr><tr><th>4</th><td>156.845</td><td>53.0419</td><td>41.0</td><td>1</td></tr><tr><th>5</th><td>145.415</td><td>41.2769</td><td>51.0</td><td>0</td></tr><tr><th>6</th><td>163.83</td><td>62.9926</td><td>35.0</td><td>1</td></tr><tr><th>7</th><td>149.225</td><td>38.2435</td><td>32.0</td><td>0</td></tr><tr><th>8</th><td>168.91</td><td>55.48</td><td>27.0</td><td>1</td></tr><tr><th>9</th><td>147.955</td><td>34.8699</td><td>19.0</td><td>0</td></tr><tr><th>10</th><td>165.1</td><td>54.4877</td><td>54.0</td><td>1</td></tr><tr><th>11</th><td>154.305</td><td>49.8951</td><td>47.0</td><td>0</td></tr><tr><th>12</th><td>151.13</td><td>41.2202</td><td>66.0</td><td>1</td></tr><tr><th>13</th><td>144.78</td><td>36.0322</td><td>73.0</td><td>0</td></tr><tr><th>14</th><td>149.9</td><td>47.7</td><td>20.0</td><td>0</td></tr><tr><th>15</th><td>150.495</td><td>33.8493</td><td>65.3</td><td>0</td></tr><tr><th>16</th><td>163.195</td><td>48.5627</td><td>36.0</td><td>1</td></tr><tr><th>17</th><td>157.48</td><td>42.3258</td><td>44.0</td><td>1</td></tr><tr><th>18</th><td>143.942</td><td>38.3569</td><td>31.0</td><td>0</td></tr><tr><th>19</th><td>121.92</td><td>19.6179</td><td>12.0</td><td>1</td></tr><tr><th>20</th><td>105.41</td><td>13.948</td><td>8.0</td><td>0</td></tr><tr><th>21</th><td>86.36</td><td>10.4893</td><td>6.5</td><td>0</td></tr><tr><th>22</th><td>161.29</td><td>48.9879</td><td>39.0</td><td>1</td></tr><tr><th>23</th><td>156.21</td><td>42.7227</td><td>29.0</td><td>0</td></tr><tr><th>24</th><td>129.54</td><td>23.5868</td><td>13.0</td><td>1</td></tr><tr><th>&vellip;</th><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td><td>&vellip;</td></tr></tbody></table></div><p>Use only adults and center the weight observations</p><div><pre><code class="language-julia">df2 = filter(row -&gt; row[:age] &gt;= 18, df);
 mean_weight = mean(df2[:weight]);
 df2[:weight_c] = df2[:weight] .- mean_weight;
-first(df2, 5)</code></pre><p>&lt;table class=&quot;data-frame&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;height&lt;/th&gt;&lt;th&gt;weight&lt;/th&gt;&lt;th&gt;age&lt;/th&gt;&lt;th&gt;male&lt;/th&gt;&lt;th&gt;weight_c&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;Float64⍰&lt;/th&gt;&lt;th&gt;Float64⍰&lt;/th&gt;&lt;th&gt;Float64⍰&lt;/th&gt;&lt;th&gt;Int64⍰&lt;/th&gt;&lt;th&gt;Float64&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;p&gt;5 rows × 5 columns&lt;/p&gt;&lt;tr&gt;&lt;th&gt;1&lt;/th&gt;&lt;td&gt;151.765&lt;/td&gt;&lt;td&gt;47.8256&lt;/td&gt;&lt;td&gt;63.0&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;2.83512&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;2&lt;/th&gt;&lt;td&gt;139.7&lt;/td&gt;&lt;td&gt;36.4858&lt;/td&gt;&lt;td&gt;63.0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;-8.50468&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;3&lt;/th&gt;&lt;td&gt;136.525&lt;/td&gt;&lt;td&gt;31.8648&lt;/td&gt;&lt;td&gt;65.0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;-13.1256&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;4&lt;/th&gt;&lt;td&gt;156.845&lt;/td&gt;&lt;td&gt;53.0419&lt;/td&gt;&lt;td&gt;41.0&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;8.05143&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;5&lt;/th&gt;&lt;td&gt;145.415&lt;/td&gt;&lt;td&gt;41.2769&lt;/td&gt;&lt;td&gt;51.0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;-3.71361&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</p><p>Extract variables for Turing model</p><pre><code class="language-julia">y = convert(Vector{Float64}, df2[:height]);
-x = convert(Vector{Float64}, df2[:weight_c]);</code></pre><p>Define the regression model</p><pre><code class="language-julia">@model line(y, x) = begin
+first(df2, 5)</code></pre><table class="data-frame"><thead><tr><th></th><th>height</th><th>weight</th><th>age</th><th>male</th><th>weight_c</th></tr><tr><th></th><th>Float64⍰</th><th>Float64⍰</th><th>Float64⍰</th><th>Int64⍰</th><th>Float64</th></tr></thead><tbody><p>5 rows × 5 columns</p><tr><th>1</th><td>151.765</td><td>47.8256</td><td>63.0</td><td>1</td><td>2.83512</td></tr><tr><th>2</th><td>139.7</td><td>36.4858</td><td>63.0</td><td>0</td><td>-8.50468</td></tr><tr><th>3</th><td>136.525</td><td>31.8648</td><td>65.0</td><td>0</td><td>-13.1256</td></tr><tr><th>4</th><td>156.845</td><td>53.0419</td><td>41.0</td><td>1</td><td>8.05143</td></tr><tr><th>5</th><td>145.415</td><td>41.2769</td><td>51.0</td><td>0</td><td>-3.71361</td></tr></tbody></table></div><p>Extract variables for Turing model</p><div><pre><code class="language-julia">y = convert(Vector{Float64}, df2[:height]);
+x = convert(Vector{Float64}, df2[:weight_c]);</code></pre><pre><code class="language-none">352-element Array{Float64,1}:
+   2.8351209801136577
+  -8.50467901988634
+ -13.125647519886343
+   8.051428980113656
+  -3.7136135198863442
+  18.00210348011366
+  -6.747010019886339
+  10.489485980113656
+ -10.120600519886345
+   9.497253480113656
+   ⋮
+   2.8918199801136595
+  -5.584680519886341
+  -3.9404095198863445
+  -4.167205519886345
+   2.0413349801136604
+ -10.744289519886344
+   7.172594480113659
+   9.07201098011366
+   7.54113798011366</code></pre></div><p>Define the regression model</p><div><pre><code class="language-julia">@model line(y, x) = begin
     #priors
     alpha ~ Normal(178.0, 100.0)
     beta ~ Normal(0.0, 10.0)
@@ -26,66 +41,1181 @@ x = convert(Vector{Float64}, df2[:weight_c]);</code></pre><p>Define the regressi
     for i in 1:length(y)
       y[i] ~ Normal(mu[i], s)
     end
-end;</code></pre><p>Draw the samples</p><pre><code class="language-julia">samples = 2000
+end;</code></pre><pre><code class="language-none">line (generic function with 3 methods)</code></pre></div><p>Draw the samples</p><div><pre><code class="language-julia">samples = 2000
 adapt_cycles = 1000
 
 @time chn = sample(line(y, x), Turing.NUTS(samples, adapt_cycles, 0.65));
-draws = adapt_cycles+1:samples</code></pre><pre><code class="language-none">┌ Info: [Turing] looking for good initial eps...
-└ @ Turing.Inference /Users/rob/.julia/packages/Turing/FTRCE/src/inference/support/hmc_core.jl:240
-[NUTS{Turing.Core.FluxTrackerAD,Union{}}] found initial ϵ: 0.1
-└ @ Turing.Inference /Users/rob/.julia/packages/Turing/FTRCE/src/inference/support/hmc_core.jl:235
-┌ Warning: 6.327001291052424 exceeds 5.0; capped to 5.0 for numerical stability
-└ @ Turing.Inference /Users/rob/.julia/packages/Turing/FTRCE/src/inference/adapt/stepsize.jl:96
-┌ Info:  Adapted ϵ = 0.051517780320521116, std = [1.0, 1.0, 1.0]; 1000 iterations is used for adaption.
-└ @ Turing.Inference /Users/rob/.julia/packages/Turing/FTRCE/src/inference/adapt/adapt.jl:91
+draws = adapt_cycles+1:samples;</code></pre><pre><code class="language-none">[ Info: [Turing] looking for good initial eps...
+[ Info: [NUTS{Turing.Core.FluxTrackerAD,Union{}}] found initial ϵ: 0.1
+[NUTS] Sampling...  0%  ETA: 4:08:29[K[NUTS] Sampling...  0%  ETA: 5:00:30[K
+  ϵ:         0.1
+  α:         0.9836543936913974
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
 
 
+[K[A[K[A[K[A[NUTS] Sampling...  0%  ETA: 0:42:04[K
+  ϵ:         0.1939356767444116
+  α:         0.9991286376268622
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A┌ Warning: 5.213518620606139 exceeds 5.0; capped to 5.0 for numerical stability
+└ @ Turing.Inference ~/.julia/packages/Turing/sghu6/src/inference/adapt/stepsize.jl:96
+
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  1%  ETA: 0:13:37[K
+  ϵ:         0.32268273514521983
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  2%  ETA: 0:11:01[K
+  ϵ:         0.0577410302253041
+  α:         0.993404411776071
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  3%  ETA: 0:08:44[K
+  ϵ:         0.1073420258094914
+  α:         5.904052171234888e-152
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  3%  ETA: 0:08:27[K
+  ϵ:         0.04945962555748944
+  α:         0.7379999278334132
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  3%  ETA: 0:07:33[K
+  ϵ:         0.034865173244084884
+  α:         0.9737255693057164
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  4%  ETA: 0:07:01[K
+  ϵ:         0.05593748002512458
+  α:         0.9904455861521623
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  4%  ETA: 0:06:58[K
+  ϵ:         0.03735193797719348
+  α:         0.7246877423357777
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  5%  ETA: 0:06:41[K
+  ϵ:         0.04352017606077199
+  α:         0.910847703220792
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  5%  ETA: 0:06:11[K
+  ϵ:         0.009912156701923042
+  α:         0.9821187073149386
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  6%  ETA: 0:05:58[K
+  ϵ:         0.018445768978462646
+  α:         0.9973556018831956
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  6%  ETA: 0:05:38[K
+  ϵ:         0.027861944061121434
+  α:         0.925398018921825
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  7%  ETA: 0:05:31[K
+  ϵ:         0.03583034034290576
+  α:         0.9632732690615529
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  7%  ETA: 0:05:20[K
+  ϵ:         0.017392734960707208
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  8%  ETA: 0:05:08[K
+  ϵ:         0.04910449689856995
+  α:         0.8041618783418923
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  8%  ETA: 0:05:04[K
+  ϵ:         0.01321579138269623
+  α:         0.9998629664849602
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  9%  ETA: 0:04:58[K
+  ϵ:         0.016248953065594332
+  α:         0.9976622465876142
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  9%  ETA: 0:04:55[K
+  ϵ:         0.020162229743575812
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...  9%  ETA: 0:04:54[K
+  ϵ:         0.042546996811208784
+  α:         0.9961034275826022
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 10%  ETA: 0:04:45[K
+  ϵ:         0.06468601039912193
+  α:         0.7328260084685152
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 10%  ETA: 0:04:44[K
+  ϵ:         0.024622887156445967
+  α:         0.9459776310495365
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 11%  ETA: 0:04:32[K
+  ϵ:         0.025867575526521365
+  α:         0.9912842257341608
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 11%  ETA: 0:04:33[K
+  ϵ:         0.03287726131891469
+  α:         0.9998497344392622
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 12%  ETA: 0:04:23[K
+  ϵ:         0.04681204385504531
+  α:         0.9932062074275916
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 13%  ETA: 0:04:13[K
+  ϵ:         0.026666750330106223
+  α:         0.9967174731929205
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 13%  ETA: 0:04:13[K
+  ϵ:         0.0383269984313814
+  α:         0.9950286001189266
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 13%  ETA: 0:04:11[K
+  ϵ:         0.01541831985736124
+  α:         0.8593516517612851
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 14%  ETA: 0:04:04[K
+  ϵ:         0.06141783790179098
+  α:         0.5703814134282279
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 15%  ETA: 0:04:00[K
+  ϵ:         0.04939921062223812
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 15%  ETA: 0:04:01[K
+  ϵ:         0.01672070352369974
+  α:         0.9972117183935546
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 15%  ETA: 0:04:01[K
+  ϵ:         0.03596204534429684
+  α:         0.9998181639372169
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 16%  ETA: 0:03:57[K
+  ϵ:         0.04554048080011018
+  α:         0.9924566517172269
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 16%  ETA: 0:03:56[K
+  ϵ:         0.0213014928311404
+  α:         0.9565420333683162
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 17%  ETA: 0:03:54[K
+  ϵ:         0.01832444115196961
+  α:         0.9571241589870277
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 17%  ETA: 0:03:56[K
+  ϵ:         0.049203214999601855
+  α:         0.9986326312106173
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 18%  ETA: 0:03:50[K
+  ϵ:         0.0285815772343398
+  α:         0.9968107642335269
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 18%  ETA: 0:03:47[K
+  ϵ:         0.03574451445333899
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 19%  ETA: 0:03:41[K
+  ϵ:         0.0615024851150161
+  α:         0.9945571063361919
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 19%  ETA: 0:03:41[K
+  ϵ:         0.06804583371651887
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 20%  ETA: 0:03:34[K
+  ϵ:         0.05543319431410269
+  α:         0.8500683667792032
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 21%  ETA: 0:03:31[K
+  ϵ:         0.05015826378389206
+  α:         0.8021602467587573
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 21%  ETA: 0:03:31[K
+  ϵ:         0.0705869522697463
+  α:         0.18978746813638842
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 22%  ETA: 0:03:28[K
+  ϵ:         0.0691307568406668
+  α:         0.48748323239026686
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 22%  ETA: 0:03:23[K
+  ϵ:         0.053555087704713476
+  α:         0.6733215752926874
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 23%  ETA: 0:03:19[K
+  ϵ:         0.014197778715462567
+  α:         0.9974410078740352
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 23%  ETA: 0:03:19[K
+  ϵ:         0.01546861287159345
+  α:         0.9813562628618908
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 24%  ETA: 0:03:19[K
+  ϵ:         0.03740953477576349
+  α:         0.9743214920053089
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 24%  ETA: 0:03:20[K
+  ϵ:         0.022977853516261082
+  α:         0.9943059345193737
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 24%  ETA: 0:03:21[K
+  ϵ:         0.015311771130763926
+  α:         0.9936654165583534
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 24%  ETA: 0:03:22[K
+  ϵ:         0.055262039505298774
+  α:         0.9597191916810686
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 25%  ETA: 0:03:19[K
+  ϵ:         0.03991309366915481
+  α:         0.9107689307400303
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 26%  ETA: 0:03:17[K
+  ϵ:         0.04852157648220069
+  α:         0.8800487981409734
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 26%  ETA: 0:03:15[K
+  ϵ:         0.029823659904101907
+  α:         0.8721681821793634
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 27%  ETA: 0:03:13[K
+  ϵ:         0.027572253691778032
+  α:         0.9881521154544961
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 27%  ETA: 0:03:12[K
+  ϵ:         0.028349929822734227
+  α:         0.9912749541164423
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 28%  ETA: 0:03:09[K
+  ϵ:         0.09195069299748311
+  α:         1.7527811787585751e-62
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 28%  ETA: 0:03:06[K
+  ϵ:         0.04068373593128788
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 29%  ETA: 0:03:04[K
+  ϵ:         0.0595833285535318
+  α:         0.9101596879577407
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 29%  ETA: 0:03:02[K
+  ϵ:         0.03692665469997378
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 30%  ETA: 0:03:00[K
+  ϵ:         0.06297211825122055
+  α:         0.6986687902414765
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 30%  ETA: 0:02:58[K
+  ϵ:         0.11694424218186722
+  α:         3.9939519953529733e-10
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 31%  ETA: 0:02:55[K
+  ϵ:         0.06043955584995557
+  α:         0.9865440229535289
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 32%  ETA: 0:02:51[K
+  ϵ:         0.049346243500719214
+  α:         0.9215675507265895
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 32%  ETA: 0:02:48[K
+  ϵ:         0.06256029576491684
+  α:         0.974740995261165
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 33%  ETA: 0:02:45[K
+  ϵ:         0.06772153912318712
+  α:         0.14743734606731285
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 34%  ETA: 0:02:41[K
+  ϵ:         0.061858903016360205
+  α:         0.9432236615987415
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 34%  ETA: 0:02:40[K
+  ϵ:         0.0549490837094714
+  α:         0.9952261044838628
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 35%  ETA: 0:02:38[K
+  ϵ:         0.03761764060892759
+  α:         0.8783106699818543
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 35%  ETA: 0:02:38[K
+  ϵ:         0.05551346926444503
+  α:         0.36117849471400976
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 36%  ETA: 0:02:34[K
+  ϵ:         0.08577329152860047
+  α:         0.0001243356706451056
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 37%  ETA: 0:02:32[K
+  ϵ:         0.03902689447886059
+  α:         0.9949530057661369
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 37%  ETA: 0:02:31[K
+  ϵ:         0.05214168043264143
+  α:         0.8136939522276204
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 38%  ETA: 0:02:29[K
+  ϵ:         0.10122995649534294
+  α:         0.08363103481825102
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 38%  ETA: 0:02:27[K
+  ϵ:         0.05778162054497852
+  α:         0.9501576019041895
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 39%  ETA: 0:02:24[K
+  ϵ:         0.06708642875569475
+  α:         0.16072974447493119
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 40%  ETA: 0:02:23[K
+  ϵ:         0.04222994524497248
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 41%  ETA: 0:02:19[K
+  ϵ:         0.04171842886947971
+  α:         0.8452026341165629
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 41%  ETA: 0:02:17[K
+  ϵ:         0.0606931720329404
+  α:         0.6591451220867451
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 42%  ETA: 0:02:15[K
+  ϵ:         0.07517532936144251
+  α:         0.2517413991684382
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 42%  ETA: 0:02:14[K
+  ϵ:         0.07171808831088138
+  α:         0.03235822877023002
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 43%  ETA: 0:02:13[K
+  ϵ:         0.08024864712428077
+  α:         0.5670714503025398
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 43%  ETA: 0:02:11[K
+  ϵ:         0.05182303653023555
+  α:         0.9933404930517586
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 44%  ETA: 0:02:09[K
+  ϵ:         0.04482001345418866
+  α:         0.7962244350675987
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 45%  ETA: 0:02:05[K
+  ϵ:         0.062284970909957334
+  α:         0.5082306372441691
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 46%  ETA: 0:02:03[K
+  ϵ:         0.03280538565124283
+  α:         0.9998160196312047
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 46%  ETA: 0:02:02[K
+  ϵ:         0.0560689814709297
+  α:         0.9273017311047573
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 47%  ETA: 0:01:57[K
+  ϵ:         0.04037540474132373
+  α:         0.9140484394178924
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 48%  ETA: 0:01:56[K
+  ϵ:         0.01913581081880152
+  α:         0.9968100455042812
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 48%  ETA: 0:01:57[K
+  ϵ:         0.018251950137840523
+  α:         0.9903430875790373
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 48%  ETA: 0:01:57[K
+  ϵ:         0.011985551222678824
+  α:         0.9976194531165262
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 49%  ETA: 0:01:57[K
+  ϵ:         0.014089226429187486
+  α:         0.9998857181846911
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 49%  ETA: 0:01:56[K
+  ϵ:         0.05233310705156214
+  α:         0.9760763190663899
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 50%  ETA: 0:01:55[K
+  ϵ:         0.01768460944085644
+  α:         0.9979800151367506
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 50%  ETA: 0:01:55[K
+  ϵ:         0.016007440642196228
+  α:         0.9984494827950415
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A[ Info:  Adapted ϵ = 0.04620580710939563, std = [1.0, 1.0, 1.0]; 1000 iterations is used for adaption.
+
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 50%  ETA: 0:01:54[K
+  ϵ:         0.04620580710939563
+  α:         0.8309545055553854
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 51%  ETA: 0:01:53[K
+  ϵ:         0.04620580710939563
+  α:         0.8234758497242254
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 51%  ETA: 0:01:52[K
+  ϵ:         0.04620580710939563
+  α:         0.9651925732107429
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 52%  ETA: 0:01:50[K
+  ϵ:         0.04620580710939563
+  α:         0.9708799094121005
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 53%  ETA: 0:01:48[K
+  ϵ:         0.04620580710939563
+  α:         0.7158921366676152
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 53%  ETA: 0:01:47[K
+  ϵ:         0.04620580710939563
+  α:         0.975225940077572
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 54%  ETA: 0:01:46[K
+  ϵ:         0.04620580710939563
+  α:         0.9872713308674782
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 54%  ETA: 0:01:44[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 55%  ETA: 0:01:42[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 55%  ETA: 0:01:41[K
+  ϵ:         0.04620580710939563
+  α:         0.999367356779828
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 56%  ETA: 0:01:39[K
+  ϵ:         0.04620580710939563
+  α:         0.9838118152198301
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 56%  ETA: 0:01:38[K
+  ϵ:         0.04620580710939563
+  α:         0.972347369722572
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 57%  ETA: 0:01:36[K
+  ϵ:         0.04620580710939563
+  α:         0.9734994951981696
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 58%  ETA: 0:01:35[K
+  ϵ:         0.04620580710939563
+  α:         0.9705207685634907
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 58%  ETA: 0:01:35[K
+  ϵ:         0.04620580710939563
+  α:         0.9507977646489628
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 58%  ETA: 0:01:34[K
+  ϵ:         0.04620580710939563
+  α:         0.9824314492946342
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 59%  ETA: 0:01:32[K
+  ϵ:         0.04620580710939563
+  α:         0.9938342638078228
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 59%  ETA: 0:01:31[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 60%  ETA: 0:01:30[K
+  ϵ:         0.04620580710939563
+  α:         0.9681324432740581
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 60%  ETA: 0:01:29[K
+  ϵ:         0.04620580710939563
+  α:         0.9772672732072372
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 61%  ETA: 0:01:27[K
+  ϵ:         0.04620580710939563
+  α:         0.989486830895536
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 62%  ETA: 0:01:25[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 62%  ETA: 0:01:24[K
+  ϵ:         0.04620580710939563
+  α:         0.9987408913299444
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 63%  ETA: 0:01:23[K
+  ϵ:         0.04620580710939563
+  α:         0.9786897800044989
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 63%  ETA: 0:01:22[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 64%  ETA: 0:01:21[K
+  ϵ:         0.04620580710939563
+  α:         0.8797140518135123
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 64%  ETA: 0:01:19[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 65%  ETA: 0:01:18[K
+  ϵ:         0.04620580710939563
+  α:         0.8638835515755983
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 65%  ETA: 0:01:17[K
+  ϵ:         0.04620580710939563
+  α:         0.9450842845467798
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 66%  ETA: 0:01:16[K
+  ϵ:         0.04620580710939563
+  α:         0.9323324617610663
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 66%  ETA: 0:01:16[K
+  ϵ:         0.04620580710939563
+  α:         0.6644616641305614
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 67%  ETA: 0:01:13[K
+  ϵ:         0.04620580710939563
+  α:         0.9615384350670502
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 67%  ETA: 0:01:13[K
+  ϵ:         0.04620580710939563
+  α:         0.9956322679342113
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 68%  ETA: 0:01:11[K
+  ϵ:         0.04620580710939563
+  α:         0.877068525980798
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 68%  ETA: 0:01:11[K
+  ϵ:         0.04620580710939563
+  α:         0.9498983894496441
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 69%  ETA: 0:01:10[K
+  ϵ:         0.04620580710939563
+  α:         0.9446380020612586
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 69%  ETA: 0:01:09[K
+  ϵ:         0.04620580710939563
+  α:         0.7876971069060228
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 70%  ETA: 0:01:07[K
+  ϵ:         0.04620580710939563
+  α:         0.15974928505097089
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 70%  ETA: 0:01:06[K
+  ϵ:         0.04620580710939563
+  α:         0.9246506966738572
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 71%  ETA: 0:01:05[K
+  ϵ:         0.04620580710939563
+  α:         0.9997208828508577
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 71%  ETA: 0:01:04[K
+  ϵ:         0.04620580710939563
+  α:         0.9847848407141272
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 72%  ETA: 0:01:02[K
+  ϵ:         0.04620580710939563
+  α:         0.9907785132254363
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 72%  ETA: 0:01:02[K
+  ϵ:         0.04620580710939563
+  α:         0.9989782836627263
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 73%  ETA: 0:01:01[K
+  ϵ:         0.04620580710939563
+  α:         0.9524606146262452
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 73%  ETA: 0:01:00[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 74%  ETA: 0:00:59[K
+  ϵ:         0.04620580710939563
+  α:         0.9945135284277622
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 74%  ETA: 0:00:57[K
+  ϵ:         0.04620580710939563
+  α:         0.8646870989612306
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 75%  ETA: 0:00:56[K
+  ϵ:         0.04620580710939563
+  α:         0.978639413392657
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 75%  ETA: 0:00:56[K
+  ϵ:         0.04620580710939563
+  α:         0.903415558795726
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 76%  ETA: 0:00:54[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 76%  ETA: 0:00:53[K
+  ϵ:         0.04620580710939563
+  α:         0.9259961962352548
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 77%  ETA: 0:00:51[K
+  ϵ:         0.04620580710939563
+  α:         0.7059735496450219
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 77%  ETA: 0:00:50[K
+  ϵ:         0.04620580710939563
+  α:         0.7214060068529873
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 78%  ETA: 0:00:49[K
+  ϵ:         0.04620580710939563
+  α:         0.9820513230152769
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 79%  ETA: 0:00:48[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 79%  ETA: 0:00:46[K
+  ϵ:         0.04620580710939563
+  α:         0.7974831097306885
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 80%  ETA: 0:00:45[K
+  ϵ:         0.04620580710939563
+  α:         0.47282948997085006
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 80%  ETA: 0:00:43[K
+  ϵ:         0.04620580710939563
+  α:         0.9375733404670352
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 81%  ETA: 0:00:42[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 82%  ETA: 0:00:41[K
+  ϵ:         0.04620580710939563
+  α:         0.9970874295108573
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 82%  ETA: 0:00:40[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 83%  ETA: 0:00:38[K
+  ϵ:         0.04620580710939563
+  α:         0.9491342815509326
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 83%  ETA: 0:00:37[K
+  ϵ:         0.04620580710939563
+  α:         0.916280943902539
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 84%  ETA: 0:00:36[K
+  ϵ:         0.04620580710939563
+  α:         0.9987858472805395
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 84%  ETA: 0:00:35[K
+  ϵ:         0.04620580710939563
+  α:         0.8999281625123162
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 85%  ETA: 0:00:34[K
+  ϵ:         0.04620580710939563
+  α:         0.9210689470436546
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 85%  ETA: 0:00:33[K
+  ϵ:         0.04620580710939563
+  α:         0.8985846697504997
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 86%  ETA: 0:00:31[K
+  ϵ:         0.04620580710939563
+  α:         0.9509637625384806
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 86%  ETA: 0:00:30[K
+  ϵ:         0.04620580710939563
+  α:         0.8289116379669015
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 87%  ETA: 0:00:29[K
+  ϵ:         0.04620580710939563
+  α:         1.0
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 87%  ETA: 0:00:28[K
+  ϵ:         0.04620580710939563
+  α:         0.8599884273417309
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 88%  ETA: 0:00:27[K
+  ϵ:         0.04620580710939563
+  α:         0.8699028334861162
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 89%  ETA: 0:00:25[K
+  ϵ:         0.04620580710939563
+  α:         0.9351747093713756
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 89%  ETA: 0:00:24[K
+  ϵ:         0.04620580710939563
+  α:         0.9987803099210483
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 90%  ETA: 0:00:23[K
+  ϵ:         0.04620580710939563
+  α:         0.9724012799349542
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 90%  ETA: 0:00:22[K
+  ϵ:         0.04620580710939563
+  α:         0.8398781045867997
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 91%  ETA: 0:00:21[K
+  ϵ:         0.04620580710939563
+  α:         0.7061345355920566
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 91%  ETA: 0:00:19[K
+  ϵ:         0.04620580710939563
+  α:         0.9216011486491381
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 92%  ETA: 0:00:18[K
+  ϵ:         0.04620580710939563
+  α:         0.9054239933631179
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 92%  ETA: 0:00:18[K
+  ϵ:         0.04620580710939563
+  α:         0.7825803282158259
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 92%  ETA: 0:00:17[K
+  ϵ:         0.04620580710939563
+  α:         0.9979864098914641
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 93%  ETA: 0:00:16[K
+  ϵ:         0.04620580710939563
+  α:         0.6827853189554308
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 93%  ETA: 0:00:15[K
+  ϵ:         0.04620580710939563
+  α:         0.9972737312929912
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 94%  ETA: 0:00:13[K
+  ϵ:         0.04620580710939563
+  α:         0.9572835175747152
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 94%  ETA: 0:00:12[K
+  ϵ:         0.04620580710939563
+  α:         0.8657753983462835
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 95%  ETA: 0:00:11[K
+  ϵ:         0.04620580710939563
+  α:         0.9593905187264786
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 96%  ETA: 0:00:10[K
+  ϵ:         0.04620580710939563
+  α:         0.6734994909117566
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 96%  ETA: 0:00:08[K
+  ϵ:         0.04620580710939563
+  α:         0.9962556301164067
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 97%  ETA: 0:00:07[K
+  ϵ:         0.04620580710939563
+  α:         0.7875967637662282
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 97%  ETA: 0:00:07[K
+  ϵ:         0.04620580710939563
+  α:         0.5539476013776865
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 98%  ETA: 0:00:05[K
+  ϵ:         0.04620580710939563
+  α:         0.7744097458593459
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 98%  ETA: 0:00:04[K
+  ϵ:         0.04620580710939563
+  α:         0.9807301421109467
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 99%  ETA: 0:00:03[K
+  ϵ:         0.04620580710939563
+  α:         0.8735297350105826
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 99%  ETA: 0:00:02[K
+  ϵ:         0.04620580710939563
+  α:         0.9813920640681828
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling... 99%  ETA: 0:00:01[K
+  ϵ:         0.04620580710939563
+  α:         0.9879263885030243
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...100%  ETA: 0:00:01[K
+  ϵ:         0.04620580710939563
+  α:         0.9549218951756588
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...100%  ETA: 0:00:00[K
+  ϵ:         0.04620580710939563
+  α:         0.895515429889433
+  pre_cond:  [1.0, 1.0, 1.0][A[A[A
+
+
+[K[A[K[A[K[A[NUTS] Sampling...100% Time: 0:03:39[K
 [NUTS] Finished with
-  Running time        = 159.94918556499996;
+  Running time        = 218.9903740920002;
   #lf / sample        = 0.0;
-  #evals / sample     = 20.008;
+  #evals / sample     = 20.293;
   pre-cond. metric    = [1.0, 1.0, 1.0].
-170.377918 seconds (1.34 G allocations: 87.482 GiB, 15.07% gc time)
-
-
-
-
-
-1001:2000</code></pre><p>Show corrected results (drop adaptation samples)</p><pre><code class="language-julia">chn2 = MCMCChain.Chains(chn.value[draws,:,:], names=chn.names)</code></pre><pre><code class="language-none">Object of type &quot;Chains{Float64}&quot;
-
-Iterations = 1:1000
-Thinning interval = 1
-Chains = 1
-Samples per chain = 1000
-
-Union{Missing, Float64}[154.565 0.941322 … 22.0 0.0515178; 154.916 0.883904 … 34.0 0.0515178; … ; 154.289 0.851291 … 22.0 0.0515178; 154.37 0.937918 … 10.0 0.0515178]</code></pre><p>Look at the proper draws (in corrected chn2)</p><pre><code class="language-julia">describe(chn2)</code></pre><pre><code class="language-none">Iterations = 1:1000
-Thinning interval = 1
-Chains = 1
-Samples per chain = 1000
-
-Empirical Posterior Estimates:
-              Mean                   SD                       Naive SE                      MCSE                ESS    
-   alpha   154.61332796  0.259161915144187238180251 0.0081954193462691650451379 0.0210813303088451635403100  151.128487
-    beta     0.90576261  0.042698830241467457258242 0.0013502555698791454674712 0.0008073661429612670730610 1000.000000
-  lf_num     0.00000000  0.000000000000000000000000 0.0000000000000000000000000 0.0000000000000000000000000         NaN
-       s     5.10082014  0.196183320754445472688943 0.0062038613251943043949699 0.0054795928509070619683019 1000.000000
- elapsed     0.07116950  0.054788946285877590525182 0.0017325786086399600719604 0.0025559342065862200761572  459.501100
- epsilon     0.05151778  0.000000000000000013884732 0.0000000000000000004390738 0.0000000000000000023129646   36.036036
-      lp -1083.66705962  1.208537476717588265984205 0.0382173106410029217450131 0.0685026818053934005714467  311.246945
-eval_num    18.60400000 13.295862663398866132524745 0.4204520947313308276704902 0.3685864891718090841088440 1000.000000
-  lf_eps     0.05151778  0.000000000000000013884732 0.0000000000000000004390738 0.0000000000000000023129646   36.036036
-
-Quantiles:
-               2.5%           25.0%           50.0%           75.0%          97.5%    
-   alpha   154.115249976   154.428978890   154.615084568   154.78540763   155.12353252
-    beta     0.823492977     0.874431020     0.906152726     0.93672589     0.98784233
-  lf_num     0.000000000     0.000000000     0.000000000     0.00000000     0.00000000
-       s     4.734281054     4.966697003     5.093838278     5.21369238     5.50648751
- elapsed     0.011072525     0.033625251     0.039526645     0.10545082     0.18928973
- epsilon     0.051517780     0.051517780     0.051517780     0.05151778     0.05151778
-      lp -1086.947008681 -1084.227420414 -1083.320255590 -1082.75445198 -1082.31191138
-eval_num     4.000000000    10.000000000    10.000000000    22.00000000    46.00000000
-  lf_eps     0.051517780     0.051517780     0.051517780     0.05151778     0.05151778</code></pre><p>Compare with a previous result</p><pre><code class="language-julia">m4_2s_result = &quot;
+231.794138 seconds (1.36 G allocations: 88.804 GiB, 13.59% gc time)
+1001:2000</code></pre></div><p>Show corrected results (drop adaptation samples)</p><pre><code class="language- 2t">chn2 = MCMCChains.Chains(chn.value[draws,:,:],
+  vcat(chn.name_map[:internals], chn.name_map[:parameters]),
+  Dict(
+    :parameters =&gt; chn.name_map[:parameters],
+    :internals =&gt; chn.name_map[:internals]
+  )
+)</code></pre><p>Look at the proper draws (in corrected chn2)</p><pre><code class="language- 2t">describe(chn2)</code></pre><p>Compare with a previous result</p><pre><code class="language- 2t">clip_43s_example_output = &quot;
 
 Iterations = 1:1000
 Thinning interval = 1
@@ -103,25 +1233,10 @@ Quantiles:
 alpha 154.0610000 154.4150000 154.5980000 154.7812500 155.1260000
  beta   0.8255494   0.8790695   0.9057435   0.9336445   0.9882981
 sigma   4.7524368   4.9683400   5.0994450   5.2353100   5.5090128
-&quot;;</code></pre><p>Plot the regerssion line and observations</p><pre><code class="language-julia">scatter(x, y, lab=&quot;Observations&quot;, xlab=&quot;weight&quot;, ylab=&quot;height&quot;)
+&quot;;
+
+#=</code></pre><p>Plot the chains</p><pre><code class="language- 2t">plot(chn3)</code></pre><p>Plot the regerssion line and observations</p><pre><code class="language- 2t">scatter(x, y, lab=&quot;Observations&quot;, xlab=&quot;weight&quot;, ylab=&quot;height&quot;)
 xi = -15.0:0.1:15.0
 yi = mean(chn2.value[:,1,:]) .+ mean(chn2.value[:, 2, :])*xi
-plot!(xi, yi, lab=&quot;Regression line&quot;)</code></pre><p><img src="../output_18_0.svg" alt="svg"/></p><p>Plot the chains</p><pre><code class="language-julia">plot(chn2)</code></pre><pre><code class="language-none">┌ Warning: No strict ticks found
-└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
-┌ Warning: No strict ticks found
-└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173</code></pre><p><img src="../output_20_1.svg" alt="svg"/></p><pre><code class="language-none">┌ Warning: No strict ticks found
-└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
-GKS: Rectangle definition is invalid in routine SET_WINDOW
-GKS: Rectangle definition is invalid in routine SET_WINDOW
-┌ Warning: No strict ticks found
-└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
-GKS: Rectangle definition is invalid in routine SET_WINDOW
-GKS: Rectangle definition is invalid in routine SET_WINDOW
-┌ Warning: No strict ticks found
-└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
-GKS: Rectangle definition is invalid in routine SET_WINDOW
-GKS: Rectangle definition is invalid in routine SET_WINDOW
-┌ Warning: No strict ticks found
-└ @ PlotUtils /Users/rob/.julia/packages/PlotUtils/GxT73/src/ticks.jl:173
-GKS: Rectangle definition is invalid in routine SET_WINDOW
-GKS: Rectangle definition is invalid in routine SET_WINDOW</code></pre><p>End of <code>m4.2t.jl</code></p><p><em>This notebook was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../../02/m2.1t/"><span class="direction">Previous</span><span class="title">m2.1t</span></a><a class="next" href="../../"><span class="direction">Next</span><span class="title">Functions</span></a></footer></article></body></html>
+plot!(xi, yi, lab=&quot;Regression line&quot;)
+=#</code></pre><p>End of <code>04/m4.2t.jl</code></p><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../../02/m2.1t/"><span class="direction">Previous</span><span class="title">m2.1t</span></a><a class="next" href="../../"><span class="direction">Next</span><span class="title">Functions</span></a></footer></article></body></html>
