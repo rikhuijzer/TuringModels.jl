@@ -18,55 +18,55 @@ sampler = NUTS(Nsamples, Nadapt, δ)
 sampler = Turing.NUTS(2000, 1000, 0.65)
 chn = sample(model(), sampler)
 
-chn1 = move_parameters_to_new_section(chn, :pooled, [&quot;b&quot;, &quot;d&quot;, &quot;zeta&quot;])
+chn1 = set_section(chn, Dict(
+  :parameters =&gt; [&quot;a&quot;, &quot;c&quot;],
+  :pooled =&gt; [&quot;b&quot;, &quot;d&quot;],
+  :internals =&gt; [&quot;elapsed&quot;, &quot;epsilon&quot;, &quot;eval_num&quot;, &quot;lf_eps&quot;, &quot;lf_num&quot;, &quot;lp&quot;])
+)
 
 describe(chn1)
 describe(chn1, section=:pooled)
-
-mean(chn1[:a])</code></pre><pre><code class="language-none">[ Info: [Turing] looking for good initial eps...
-[ Info: [NUTS{Turing.Core.ForwardDiffAD{40},Union{}}] found initial ϵ: 0.2
-[NUTS] Sampling...  0%  ETA: 1:37:06[K[NUTS] Sampling...  0%  ETA: 2:23:16[K
-  ϵ:         0.2
+describe(chn1, section=:internals)</code></pre><pre><code class="language-none">[ Info: [Turing] looking for good initial eps...
+[ Info: [Turing] found initial ϵ: 0.2004730224609375
+[NUTS] Sampling...  0%  ETA: 1:42:27[K[NUTS] Sampling...  0%  ETA: 2:29:33[K
+  ϵ:         0.2004730224609375
   α:         1.0
-  pre_cond:  [1.0, 1.0, 1.0, 1.0][A[A[A[ Info:  Adapted ϵ = 0.10425209876757366, std = [1.0, 1.0, 1.0, 1.0]; 1000 iterations is used for adaption.
+  pre_cond:  [1.0, 1.0, 1.0, 1.0][A[A[A[ Info:  Adapted ϵ = 0.06610278298215984, std = [1.0, 1.0, 1.0, 1.0]; 1000 iterations is used for adaption.
 
 
 
 [K[A[K[A[K[A[NUTS] Sampling... 92%  ETA: 0:00:00[K
-  ϵ:         0.10425209876757366
-  α:         0.9308700560076718
+  ϵ:         0.06610278298215984
+  α:         0.9314485554273816
   pre_cond:  [1.0, 1.0, 1.0, 1.0][A[A[A
 
 
-[K[A[K[A[K[A[NUTS] Sampling...100% Time: 0:00:05[K
+[K[A[K[A[K[A[NUTS] Sampling...100% Time: 0:00:06[K
 [NUTS] Finished with
-  Running time        = 5.138950281999978;
+  Running time        = 5.36681683700001;
   #lf / sample        = 0.0;
-  #evals / sample     = 10.698;
+  #evals / sample     = 15.014;
   pre-cond. metric    = [1.0, 1.0, 1.0, 1.0].
-┌ Warning: zeta not in [&quot;c&quot;, &quot;b&quot;, &quot;a&quot;, &quot;d&quot;], ignored
-└ @ TuringModels ~/build/StatisticalRethinkingJulia/TuringModels.jl/src/utils/move_parameters_to_new_section.jl:26
-[&quot;c&quot;, &quot;a&quot;]
 Log evidence      = 0.0
 Iterations        = 1:2000
 Thinning interval = 1
 Chains            = 1
 Samples per chain = 2000
-parameters        = c, a
+parameters        = a, c
 
 Empirical Posterior Estimates
 ───────────────────────────────────────────
 parameters
     Mean    SD   Naive SE  MCSE   ESS
-a -9.9970 0.1643   0.0037 0.0025 2000
-c -5.9992 0.1128   0.0025 0.0014 2000
+a -9.9919 0.5173   0.0116 0.0110 2000
+c -5.9955 0.3928   0.0088 0.0082 2000
 
 Quantiles
 ───────────────────────────────────────────
 parameters
-    2.5%     25.0%   50.0%   75.0%   97.5%
-a -13.0393 -10.0645 -9.9984 -9.9355 -7.1023
-c  -7.5317  -6.0672 -6.0008 -5.9304 -4.9116
+    2.5%     25.0%    50.0%   75.0%   97.5%
+a -20.8863 -10.0667 -10.0003 -9.9337 0.9258
+c -14.2325  -6.0684  -6.0003 -5.9381 2.1382
 
 Log evidence      = 0.0
 Iterations        = 1:2000
@@ -76,17 +76,44 @@ Samples per chain = 2000
 pooled            = b, d
 
 Empirical Posterior Estimates
-──────────────────────────────────────────
+─────────────────────────────────────────
 pooled
-    Mean    SD   Naive SE  MCSE   ESS
-b -7.9950 0.1456   0.0033 0.0030 2000
-d -3.9982 0.1225   0.0027 0.0025 2000
+    Mean    SD   Naive SE  MCSE  ESS
+b -7.9907 0.5015   0.0112 0.010 2000
+d -3.9986 0.2685   0.0060 0.005 2000
 
 Quantiles
-──────────────────────────────────────────
+─────────────────────────────────────────
 pooled
     2.5%    25.0%   50.0%   75.0%   97.5%
-b -10.5065 -8.0673 -7.9963 -7.9263 -5.7419
-d  -5.5448 -4.0655 -3.9997 -3.9318 -2.4920
+b -18.5321 -8.0672 -7.9975 -7.9319 2.5271
+d  -9.5397 -4.0720 -4.0020 -3.9339 1.3513
 
-NaN</code></pre></div><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../../intro/"><span class="direction">Previous</span><span class="title">Home</span></a><a class="next" href="../../02/m2.1t/"><span class="direction">Next</span><span class="title">m2.1t</span></a></footer></article></body></html>
+Log evidence      = 0.0
+Iterations        = 1:2000
+Thinning interval = 1
+Chains            = 1
+Samples per chain = 2000
+internals         = elapsed, epsilon, eval_num, lf_eps, lf_num, lp
+
+Empirical Posterior Estimates
+────────────────────────────────────────────────────────
+internals
+           Mean      SD    Naive SE   MCSE     ESS
+ elapsed   0.0027   0.0763   0.0017  0.0023 1071.4808
+ epsilon   0.1053   0.1193   0.0027  0.0094  161.3020
+eval_num  15.0140   8.5253   0.1906  0.8629   97.6121
+  lf_eps   0.1053   0.1193   0.0027  0.0094  161.3020
+  lf_num   0.0000   0.0000   0.0000  0.0000       NaN
+      lp -31.7257 729.4268  16.3105 35.2700  427.7130
+
+Quantiles
+────────────────────────────────────────────────────────
+internals
+               2.5%       25.0%   50.0%   75.0%   97.5%
+ elapsed  1.0000000×10⁻⁴  0.0002  0.0002  0.0004  2.9458
+ epsilon  2.2800000×10⁻²  0.0661  0.0661  0.1245  3.7881
+eval_num   4.0000000×10⁰ 10.0000 10.0000 22.0000 94.0000
+  lf_eps  2.2800000×10⁻²  0.0661  0.0661  0.1245  3.7881
+  lf_num               0  0.0000  0.0000  0.0000  0.0000
+      lp -1.63893431×10⁴  2.8548  3.8146  4.5473  5.5157</code></pre></div><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../../intro/"><span class="direction">Previous</span><span class="title">Home</span></a><a class="next" href="../../02/m2.1t/"><span class="direction">Next</span><span class="title">m2.1t</span></a></footer></article></body></html>
