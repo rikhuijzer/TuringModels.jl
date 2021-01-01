@@ -1,119 +1,0 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>section_example · TuringModels.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link href="../../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>TuringModels.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../../intro/">Home</a></li><li><span class="toctext">Chapter 00</span><ul><li class="current"><a class="toctext" href>section_example</a><ul class="internal"></ul></li></ul></li><li><span class="toctext">Chapter 02</span><ul><li><a class="toctext" href="../../02/m2.1t/">m2.1t</a></li></ul></li><li><span class="toctext">Chapter 04</span><ul><li><a class="toctext" href="../../04/m4.2t/">m4.2t</a></li></ul></li><li><span class="toctext">Chapter 08</span></li><li><span class="toctext">Chapter 10</span></li><li><span class="toctext">Chapter 11</span></li><li><span class="toctext">Chapter 12</span></li><li><a class="toctext" href="../../">Functions</a></li></ul></nav><article id="docs"><header><nav><ul><li>Chapter 00</li><li><a href>section_example</a></li></ul><a class="edit-page" href="https://github.com/StatisticalRethinkingJulia/TuringModels.jl/blob/master/scripts/00/section_example.jl"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>section_example</span><a class="fa fa-bars" href="#"></a></div></header><div><pre><code class="language-julia">using TuringModels
-
-@model model() = begin
-    a ~ Normal(-10,.1)
-    b ~ Normal(-8,.1)
-    c ~ Normal(-6,.1)
-    d ~ Normal(-4,.1)
-    return nothing
-end
-
-Nsamples = 2000
-Nadapt = 1000
-draws = Nadapt+1 : Nsamples
-δ = .85
-sampler = NUTS(Nsamples, Nadapt, δ)
-
-sampler = Turing.NUTS(2000, 1000, 0.65)
-chn = sample(model(), sampler)
-
-chn1 = set_section(chn, Dict(
-  :parameters =&gt; [&quot;a&quot;, &quot;c&quot;],
-  :pooled =&gt; [&quot;b&quot;, &quot;d&quot;],
-  :internals =&gt; [&quot;elapsed&quot;, &quot;epsilon&quot;, &quot;eval_num&quot;, &quot;lf_eps&quot;, &quot;lf_num&quot;, &quot;lp&quot;])
-)
-
-describe(chn1)
-describe(chn1, section=:pooled)
-describe(chn1, section=:internals)</code></pre><pre><code class="language-none">[ Info: [Turing] looking for good initial eps...
-[ Info: [Turing] found initial ϵ: 0.2004730224609375
-[NUTS] Sampling...  0%  ETA: 1:42:27[K[NUTS] Sampling...  0%  ETA: 2:29:33[K
-  ϵ:         0.2004730224609375
-  α:         1.0
-  pre_cond:  [1.0, 1.0, 1.0, 1.0][A[A[A[ Info:  Adapted ϵ = 0.06610278298215984, std = [1.0, 1.0, 1.0, 1.0]; 1000 iterations is used for adaption.
-
-
-
-[K[A[K[A[K[A[NUTS] Sampling... 92%  ETA: 0:00:00[K
-  ϵ:         0.06610278298215984
-  α:         0.9314485554273816
-  pre_cond:  [1.0, 1.0, 1.0, 1.0][A[A[A
-
-
-[K[A[K[A[K[A[NUTS] Sampling...100% Time: 0:00:06[K
-[NUTS] Finished with
-  Running time        = 5.36681683700001;
-  #lf / sample        = 0.0;
-  #evals / sample     = 15.014;
-  pre-cond. metric    = [1.0, 1.0, 1.0, 1.0].
-Log evidence      = 0.0
-Iterations        = 1:2000
-Thinning interval = 1
-Chains            = 1
-Samples per chain = 2000
-parameters        = a, c
-
-Empirical Posterior Estimates
-───────────────────────────────────────────
-parameters
-    Mean    SD   Naive SE  MCSE   ESS
-a -9.9919 0.5173   0.0116 0.0110 2000
-c -5.9955 0.3928   0.0088 0.0082 2000
-
-Quantiles
-───────────────────────────────────────────
-parameters
-    2.5%     25.0%    50.0%   75.0%   97.5%
-a -20.8863 -10.0667 -10.0003 -9.9337 0.9258
-c -14.2325  -6.0684  -6.0003 -5.9381 2.1382
-
-Log evidence      = 0.0
-Iterations        = 1:2000
-Thinning interval = 1
-Chains            = 1
-Samples per chain = 2000
-pooled            = b, d
-
-Empirical Posterior Estimates
-─────────────────────────────────────────
-pooled
-    Mean    SD   Naive SE  MCSE  ESS
-b -7.9907 0.5015   0.0112 0.010 2000
-d -3.9986 0.2685   0.0060 0.005 2000
-
-Quantiles
-─────────────────────────────────────────
-pooled
-    2.5%    25.0%   50.0%   75.0%   97.5%
-b -18.5321 -8.0672 -7.9975 -7.9319 2.5271
-d  -9.5397 -4.0720 -4.0020 -3.9339 1.3513
-
-Log evidence      = 0.0
-Iterations        = 1:2000
-Thinning interval = 1
-Chains            = 1
-Samples per chain = 2000
-internals         = elapsed, epsilon, eval_num, lf_eps, lf_num, lp
-
-Empirical Posterior Estimates
-────────────────────────────────────────────────────────
-internals
-           Mean      SD    Naive SE   MCSE     ESS
- elapsed   0.0027   0.0763   0.0017  0.0023 1071.4808
- epsilon   0.1053   0.1193   0.0027  0.0094  161.3020
-eval_num  15.0140   8.5253   0.1906  0.8629   97.6121
-  lf_eps   0.1053   0.1193   0.0027  0.0094  161.3020
-  lf_num   0.0000   0.0000   0.0000  0.0000       NaN
-      lp -31.7257 729.4268  16.3105 35.2700  427.7130
-
-Quantiles
-────────────────────────────────────────────────────────
-internals
-               2.5%       25.0%   50.0%   75.0%   97.5%
- elapsed  1.0000000×10⁻⁴  0.0002  0.0002  0.0004  2.9458
- epsilon  2.2800000×10⁻²  0.0661  0.0661  0.1245  3.7881
-eval_num   4.0000000×10⁰ 10.0000 10.0000 22.0000 94.0000
-  lf_eps  2.2800000×10⁻²  0.0661  0.0661  0.1245  3.7881
-  lf_num               0  0.0000  0.0000  0.0000  0.0000
-      lp -1.63893431×10⁴  2.8548  3.8146  4.5473  5.5157</code></pre></div><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../../intro/"><span class="direction">Previous</span><span class="title">Home</span></a><a class="next" href="../../02/m2.1t/"><span class="direction">Next</span><span class="title">m2.1t</span></a></footer></article></body></html>

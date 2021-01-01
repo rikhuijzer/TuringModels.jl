@@ -1,79 +1,0 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>m2.1t · TuringModels.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link href="../../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>TuringModels.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../../intro/">Home</a></li><li><span class="toctext">Chapter 00</span><ul><li><a class="toctext" href="../../00/section_example/">section_example</a></li></ul></li><li><span class="toctext">Chapter 02</span><ul><li class="current"><a class="toctext" href>m2.1t</a><ul class="internal"></ul></li></ul></li><li><span class="toctext">Chapter 04</span><ul><li><a class="toctext" href="../../04/m4.2t/">m4.2t</a></li></ul></li><li><span class="toctext">Chapter 08</span></li><li><span class="toctext">Chapter 10</span></li><li><span class="toctext">Chapter 11</span></li><li><span class="toctext">Chapter 12</span></li><li><a class="toctext" href="../../">Functions</a></li></ul></nav><article id="docs"><header><nav><ul><li>Chapter 02</li><li><a href>m2.1t</a></li></ul><a class="edit-page" href="https://github.com/StatisticalRethinkingJulia/TuringModels.jl/blob/master/scripts/02/m2.1t.jl"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>m2.1t</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="m2.1t.jl-1" href="#m2.1t.jl-1">m2.1t.jl</a></h1><p>Load Julia packages (libraries) needed</p><div><pre><code class="language-julia">using TuringModels
-using Optim, Turing, Flux.Tracker
-gr(size=(600,300));</code></pre><pre><code class="language-none">Plots.GRBackend()</code></pre></div><div><pre><code class="language-julia">Turing.setadbackend(:reverse_diff);</code></pre><pre><code class="language-none">:reverse_diff</code></pre></div><h3><a class="nav-anchor" id="snippet-2.8t-1" href="#snippet-2.8t-1">snippet 2.8t</a></h3><p>Define the data</p><div><pre><code class="language-julia">k = 6; n = 9;</code></pre><pre><code class="language-none">9</code></pre></div><p>Define the model</p><div><pre><code class="language-julia">@model globe_toss(n, k) = begin
-  theta ~ Beta(1, 1) # prior
-  k ~ Binomial(n, theta) # model
-  return k, theta
-end;</code></pre><pre><code class="language-none">globe_toss (generic function with 3 methods)</code></pre></div><p>Compute the &quot;maximum<em>a</em>posteriori&quot; value</p><p>Set search bounds</p><div><pre><code class="language-julia">lb = [0.0]; ub = [1.0];</code></pre><pre><code class="language-none">1-element Array{Float64,1}:
- 1.0</code></pre></div><p>Create (compile) the model</p><div><pre><code class="language-julia">model = globe_toss(n, k);</code></pre><pre><code class="language-none">Turing.Model{Tuple{:theta},Tuple{:k},getfield(Main.ex-m2.1t, Symbol(&quot;###inner_function#463#5&quot;)){Int64},NamedTuple{(:k,),Tuple{Int64}},NamedTuple{(:k,),Tuple{Symbol}}}(getfield(Main.ex-m2.1t, Symbol(&quot;###inner_function#463#5&quot;)){Int64}(Core.Box(getfield(Main.ex-m2.1t, Symbol(&quot;###inner_function#463#5&quot;)){Int64}(#= circular reference @-2 =#)), 9), (k = 6,), (k = :nothing,))</code></pre></div><p>Compute the maximum<em>a</em>posteriori</p><div><pre><code class="language-julia">maximum_a_posteriori(model, lb, ub)</code></pre><pre><code class="language-none">Results of Optimization Algorithm
- * Algorithm: Fminbox with L-BFGS
- * Starting Point: [0.9213753996466618]
- * Minimizer: [0.6666666665628591]
- * Minimum: 1.297811e+00
- * Iterations: 3
- * Convergence: true
-   * |x - x&#39;| ≤ 0.0e+00: false
-     |x - x&#39;| = 8.48e-08
-   * |f(x) - f(x&#39;)| ≤ 0.0e+00 |f(x)|: false
-     |f(x) - f(x&#39;)| = 1.12e-13 |f(x)|
-   * |g(x)| ≤ 1.0e-08: true
-     |g(x)| = 3.44e-09
-   * Stopped by an increasing objective: false
-   * Reached Maximum Number of Iterations: false
- * Objective Calls: 52
- * Gradient Calls: 52</code></pre></div><p>Use Turing mcmc</p><div><pre><code class="language-julia">chn = sample(model, Turing.NUTS(2000, 1000, 0.65));</code></pre><pre><code class="language-none">[ Info: [Turing] looking for good initial eps...
-[ Info: [Turing] found initial ϵ: 1.0
-[NUTS] Sampling...  0%  ETA: 0:16:58[K
-  ϵ:         18.895971087303078
-  α:         1.0884567470194043e-84
-  pre_cond:  [1.0][A[A[A[ Info:  Adapted ϵ = 1.3262238397240789, std = [1.0]; 1000 iterations is used for adaption.
-
-
-
-[K[A[K[A[K[A[NUTS] Sampling...100% Time: 0:00:02[K
-[NUTS] Finished with
-  Running time        = 1.539072940000004;
-  #lf / sample        = 0.0;
-  #evals / sample     = 5.714;
-  pre-cond. metric    = [1.0].
-Object of type Chains, with data of type 2000×7×1 Array{Union{Missing, Float64},3}
-
-Log evidence      = 0.0
-Iterations        = 1:2000
-Thinning interval = 1
-Chains            = 1
-Samples per chain = 2000
-internals         = elapsed, epsilon, eval_num, lf_eps, lf_num, lp
-parameters        = theta
-
-parameters
-       Mean    SD   Naive SE  MCSE     ESS
-theta 0.6427 0.1408   0.0031 0.0049 810.8821</code></pre></div><p>Look at the proper draws (in corrected chn2)</p><div><pre><code class="language-julia">chn2 = chn[1001:2000, :, :]
-describe(chn2)</code></pre><pre><code class="language-none">Log evidence      = 0.0
-Iterations        = 1001:2000
-Thinning interval = 1
-Chains            = 1
-Samples per chain = 1000
-parameters        = theta
-
-Empirical Posterior Estimates
-───────────────────────────────────────────
-parameters
-       Mean    SD   Naive SE  MCSE    ESS
-theta 0.6405 0.1388   0.0044 0.005 774.3884
-
-Quantiles
-───────────────────────────────────────────
-parameters
-       2.5%   25.0% 50.0%  75.0%  97.5%
-theta 0.2436 0.5473  0.66 0.7432 0.9452</code></pre></div><p>Show the hpd region</p><div><pre><code class="language-julia">MCMCChains.hpd(chn2[:theta], alpha=0.055)</code></pre><pre><code class="language-none">Log evidence      = 0.0
-Iterations        = 1001:2000
-Thinning interval = 1
-Chains            = 1
-Samples per chain = 1000
-parameters        = theta
-
-parameters
-      94.5% Lower 94.5% Upper
-theta  0.37852102  0.87409897</code></pre></div><p>End of <code>02/m2.1t.jl</code></p><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../../00/section_example/"><span class="direction">Previous</span><span class="title">section_example</span></a><a class="next" href="../../04/m4.2t/"><span class="direction">Next</span><span class="title">m4.2t</span></a></footer></article></body></html>
