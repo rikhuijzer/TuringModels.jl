@@ -1,4 +1,4 @@
-Sitemap: https://tlienart.github.io/FranklinTemplates.jl/sitemap.xml
+Sitemap: https://rikhuijzer.github.io/TuringModels.jl/sitemap.xml
 
 User-agent: *
 Disallow:
