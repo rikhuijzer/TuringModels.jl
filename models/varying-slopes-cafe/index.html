@@ -1,44 +1,43 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Varying slopes café</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Varying slopes café</h1> </div> <div class=franklin-content > <pre><code class="julia hljs"><span class=hljs-keyword >using</span> TuringModels
 
-using TuringModels
+<span class=hljs-comment ># This script requires latest LKJ bijectors support.</span>
+<span class=hljs-comment ># `] add Bijectors#master` to get latest Bijectors.</span>
 
-# This script requires latest LKJ bijectors support.
-# `] add Bijectors#master` to get latest Bijectors.
+<span class=hljs-comment ># Original data is generated with fixed R seed. To simplify the replication of the result,</span>
+<span class=hljs-comment ># the generated data is saved in data folder, named &quot;d_13_1.csv&quot;</span>
 
-# Original data is generated with fixed R seed. To simplify the replication of the result,
-# the generated data is saved in data folder, named "d_13_1.csv"
+data_path = joinpath(<span class=hljs-meta >@__DIR__</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;data&quot;</span>, <span class=hljs-string >&quot;d_13_1.csv&quot;</span>)
+d = CSV.read(data_path, DataFrame)
 
-data_path = joinpath(@__DIR__, "..", "..", "data", "d_13_1.csv")
-d = CSV.read(data_path)
+<span class=hljs-meta >@model</span> m13_1(cafe, afternoon, wait) = <span class=hljs-keyword >begin</span>
 
-@model m13_1(cafe, afternoon, wait) = begin
-
-    Rho ~ LKJ(2, 1.)
-    sigma ~ truncated(Cauchy(0, 2), 0, Inf)
-    sigma_cafe ~ filldist(truncated(Cauchy(0, 2), 0, Inf), 2)
-    a ~ Normal(0, 10)
-    b ~ Normal(0, 10)
+    Rho ~ LKJ(<span class=hljs-number >2</span>, <span class=hljs-number >1.</span>)
+    sigma ~ truncated(Cauchy(<span class=hljs-number >0</span>, <span class=hljs-number >2</span>), <span class=hljs-number >0</span>, <span class=hljs-literal >Inf</span>)
+    sigma_cafe ~ filldist(truncated(Cauchy(<span class=hljs-number >0</span>, <span class=hljs-number >2</span>), <span class=hljs-number >0</span>, <span class=hljs-literal >Inf</span>), <span class=hljs-number >2</span>)
+    a ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
+    b ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
     
     dist_mu = [a, b]
-    dist_Sigma = sigma_cafe .* Rho .* sigma_cafe'
-    dist_Sigma = (dist_Sigma' + dist_Sigma) / 2
-    a_b_cafe ~ filldist(MvNormal(dist_mu, dist_Sigma), 20)
+    dist_Sigma = sigma_cafe .* Rho .* sigma_cafe&#x27;
+    dist_Sigma = (dist_Sigma&#x27; + dist_Sigma) / <span class=hljs-number >2</span>
+    a_b_cafe ~ filldist(MvNormal(dist_mu, dist_Sigma), <span class=hljs-number >20</span>)
     
-    a_cafe = a_b_cafe[1, :]
-    b_cafe = a_b_cafe[2, :]
+    a_cafe = a_b_cafe[<span class=hljs-number >1</span>, :]
+    b_cafe = a_b_cafe[<span class=hljs-number >2</span>, :]
         
     mu = a_cafe[cafe] + b_cafe[cafe] .* afternoon
     wait .~ Normal.(mu , sigma)
-end
+<span class=hljs-keyword >end</span>
 
-# Sample
+<span class=hljs-comment ># Sample</span>
 
 chns = sample(
     m13_1(d.cafe, d.afternoon, d.wait),
-    Turing.NUTS(0.95),
-    1000
+    Turing.NUTS(<span class=hljs-number >0.95</span>),
+    <span class=hljs-number >1000</span>
 )
 
-m_13_1_rethinking = """
+m_13_1_rethinking = <span class=hljs-string >&quot;&quot;&quot;
 Inference for Stan model: a73b0bd01032773825c6abf5575fd6e4.
     2 chains, each with iter=5000; warmup=2000; thin=1; 
     post-warmup draws per chain=3000, total post-warmup draws=6000.
@@ -94,10 +93,10 @@ Inference for Stan model: a73b0bd01032773825c6abf5575fd6e4.
     Rho[2,1]      -0.17    0.01  0.34 -0.75 -0.42 -0.20  0.06   0.57  3300 1.00
     Rho[2,2]       1.00    0.00  0.00  1.00  1.00  1.00  1.00   1.00  5777 1.00
     lp__          62.41    3.30 17.59 41.97 52.03 58.04 66.26 118.46    28 1.12
-"""
+&quot;&quot;&quot;</span>
 
-# Draw summary
+<span class=hljs-comment ># Draw summary</span>
 
-chns |> display
+chns |&gt; display
 
-# End of m13.1.jl
+<span class=hljs-comment ># End of m13.1.jl</span></code></pre> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 01, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->

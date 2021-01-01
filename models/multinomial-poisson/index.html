@@ -1,0 +1,61 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Multinomial Poisson regression</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Multinomial Poisson regression</h1> </div> <div class=franklin-content > <pre><code class="julia hljs"><span class=hljs-keyword >using</span> TuringModels
+
+<span class=hljs-comment ># This script requires latest LKJ bijectors support.</span>
+<span class=hljs-comment ># `] add Bijectors#master` to get latest Bijectors.</span>
+
+data_path = joinpath(<span class=hljs-meta >@__DIR__</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;data&quot;</span>, <span class=hljs-string >&quot;UCBadmit.csv&quot;</span>)
+delim = <span class=hljs-string >&quot;;&quot;</span>
+d = CSV.read(data_path, DataFrame; delim)
+
+dept_map = <span class=hljs-built_in >Dict</span>(key =&gt; idx <span class=hljs-keyword >for</span> (idx, key) <span class=hljs-keyword >in</span> enumerate(unique(d.dept)))
+d.male = [g == <span class=hljs-string >&quot;male&quot;</span> ? <span class=hljs-number >1</span> : <span class=hljs-number >0</span> <span class=hljs-keyword >for</span> g <span class=hljs-keyword >in</span> d.gender]
+d.dept_id = [dept_map[de] <span class=hljs-keyword >for</span> de <span class=hljs-keyword >in</span> d.dept]
+
+<span class=hljs-meta >@model</span> m13_2(applications, dept_id, male, admit) = <span class=hljs-keyword >begin</span>
+    sigma_dept ~ truncated(Cauchy(<span class=hljs-number >0</span>, <span class=hljs-number >2</span>), <span class=hljs-number >0</span>, <span class=hljs-literal >Inf</span>)
+    bm ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>)
+    a ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
+    a_dept ~ filldist(Normal(a, sigma_dept), <span class=hljs-number >6</span>)
+    
+    logit_p = a_dept[dept_id] + bm*male
+    
+    admit .~ BinomialLogit.(applications, logit_p)
+<span class=hljs-keyword >end</span>
+
+chns = sample(
+    m13_2(d.applications, d.dept_id, d.male, d.admit),
+    Turing.NUTS(<span class=hljs-number >0.95</span>),
+    <span class=hljs-number >1000</span>
+)
+
+m_13_2_rethinking = <span class=hljs-string >&quot;&quot;&quot;
+Inference for Stan model: 359c2483e3bdbf74fd0484be27c2909b.
+    3 chains, each with iter=4500; warmup=500; thin=1; 
+    post-warmup draws per chain=4000, total post-warmup draws=12000.
+    
+                   mean se_mean   sd     2.5%      25%      50%      75%    97.5%
+    a_dept[1]      0.67    0.00 0.10     0.48     0.61     0.67     0.74     0.87
+    a_dept[2]      0.63    0.00 0.12     0.40     0.55     0.63     0.71     0.85
+    a_dept[3]     -0.58    0.00 0.08    -0.73    -0.63    -0.58    -0.53    -0.44
+    a_dept[4]     -0.62    0.00 0.09    -0.79    -0.67    -0.62    -0.56    -0.45
+    a_dept[5]     -1.06    0.00 0.10    -1.26    -1.13    -1.06    -0.99    -0.86
+    a_dept[6]     -2.61    0.00 0.16    -2.92    -2.71    -2.60    -2.50    -2.31
+    a             -0.59    0.01 0.66    -1.94    -0.97    -0.59    -0.21     0.73
+    bm            -0.09    0.00 0.08    -0.25    -0.15    -0.09    -0.04     0.06
+    sigma_dept     1.49    0.01 0.62     0.78     1.09     1.35     1.71     3.01
+    lp__       -2602.27    0.04 2.27 -2607.74 -2603.48 -2601.90 -2600.61 -2598.95
+               n_eff Rhat
+    a_dept[1]   8191    1
+    a_dept[2]   8282    1
+    a_dept[3]  10974    1
+    a_dept[4]  10034    1
+    a_dept[5]  10783    1
+    a_dept[6]  10344    1
+    a           5839    1
+    bm          7137    1
+    sigma_dept  4626    1
+    lp__        4200    1
+    
+&quot;&quot;&quot;</span>
+
+chns |&gt; display</code></pre> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 01, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->

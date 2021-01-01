@@ -1,0 +1,89 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Varying intercepts admission decisions</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Varying intercepts admission decisions</h1> </div> <div class=franklin-content > <pre><code class="julia hljs"><span class=hljs-keyword >using</span> TuringModels
+
+<span class=hljs-comment ># This script requires latest LKJ bijectors support.</span>
+<span class=hljs-comment ># `] add Bijectors#master` to get latest Bijectors.</span>
+
+data_path = joinpath(<span class=hljs-meta >@__DIR__</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;data&quot;</span>, <span class=hljs-string >&quot;UCBadmit.csv&quot;</span>)
+delim = <span class=hljs-string >&quot;;&quot;</span>
+d = CSV.read(data_path, DataFrame; delim)
+
+dept_map = <span class=hljs-built_in >Dict</span>(key =&gt; idx <span class=hljs-keyword >for</span> (idx, key) <span class=hljs-keyword >in</span> enumerate(unique(d.dept)))
+d.male = [g == <span class=hljs-string >&quot;male&quot;</span> ? <span class=hljs-number >1</span> : <span class=hljs-number >0</span> <span class=hljs-keyword >for</span> g <span class=hljs-keyword >in</span> d.gender]
+d.dept_id = [dept_map[de] <span class=hljs-keyword >for</span> de <span class=hljs-keyword >in</span> d.dept]
+
+<span class=hljs-meta >@model</span> m13_3(applications, dept_id, male, admit) = <span class=hljs-keyword >begin</span>
+    Rho ~ LKJ(<span class=hljs-number >2</span>, <span class=hljs-number >2.</span>)
+    sigma_dept ~ filldist(truncated(Cauchy(<span class=hljs-number >0</span>, <span class=hljs-number >2</span>), <span class=hljs-number >0</span>, <span class=hljs-literal >Inf</span>), <span class=hljs-number >2</span>)
+    bm ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>)
+    a ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>)
+    
+    dist_mu = [a, bm]
+    dist_Sigma = sigma_dept .* Rho .* sigma_dept&#x27;
+    dist_Sigma = (dist_Sigma&#x27; + dist_Sigma) / <span class=hljs-number >2</span>
+    
+    a_bm_dept ~ filldist(MvNormal(dist_mu, dist_Sigma), <span class=hljs-number >6</span>)
+    
+    a_dept, bm_dept = a_bm_dept[<span class=hljs-number >1</span>, :], a_bm_dept[<span class=hljs-number >2</span>, :]
+    logit_p = a_dept[dept_id] + bm_dept[dept_id] .* male
+    
+    admit .~ BinomialLogit.(applications, logit_p)
+<span class=hljs-keyword >end</span>
+
+chns = sample(
+    m13_3(d.applications, d.dept_id, d.male, d.admit),
+    Turing.NUTS(<span class=hljs-number >0.95</span>),
+    <span class=hljs-number >1000</span>
+)
+
+m_13_3_rethinking = <span class=hljs-string >&quot;&quot;&quot;
+Inference for Stan model: f0d86ec689cbf7921aab4fc0f55616d2.
+    4 chains, each with iter=5000; warmup=1000; thin=1; 
+    post-warmup draws per chain=4000, total post-warmup draws=16000.
+    
+                      mean se_mean   sd     2.5%      25%      50%      75%
+    bm_dept[1]       -0.79    0.00 0.27    -1.32    -0.97    -0.79    -0.61
+    bm_dept[2]       -0.21    0.00 0.33    -0.87    -0.42    -0.20     0.00
+    bm_dept[3]        0.08    0.00 0.14    -0.18    -0.01     0.08     0.18
+    bm_dept[4]       -0.09    0.00 0.14    -0.37    -0.19    -0.09     0.00
+    bm_dept[5]        0.12    0.00 0.19    -0.24    -0.01     0.12     0.25
+    bm_dept[6]       -0.12    0.00 0.27    -0.67    -0.29    -0.12     0.05
+    a_dept[1]         1.30    0.00 0.25     0.82     1.13     1.30     1.47
+    a_dept[2]         0.74    0.00 0.33     0.08     0.52     0.73     0.95
+    a_dept[3]        -0.65    0.00 0.09    -0.82    -0.71    -0.65    -0.59
+    a_dept[4]        -0.62    0.00 0.10    -0.83    -0.69    -0.62    -0.55
+    a_dept[5]        -1.13    0.00 0.11    -1.36    -1.21    -1.13    -1.05
+    a_dept[6]        -2.60    0.00 0.20    -3.01    -2.73    -2.60    -2.46
+    a                -0.49    0.01 0.73    -1.96    -0.91    -0.49    -0.07
+    bm               -0.16    0.00 0.24    -0.65    -0.29    -0.16    -0.02
+    sigma_dept[1]     1.67    0.01 0.63     0.88     1.25     1.53     1.94
+    sigma_dept[2]     0.50    0.00 0.26     0.16     0.33     0.45     0.61
+    Rho[1,1]          1.00     NaN 0.00     1.00     1.00     1.00     1.00
+    Rho[1,2]         -0.31    0.00 0.35    -0.87    -0.59    -0.35    -0.08
+    Rho[2,1]         -0.31    0.00 0.35    -0.87    -0.59    -0.35    -0.08
+    Rho[2,2]          1.00    0.00 0.00     1.00     1.00     1.00     1.00
+    lp__          -2593.92    0.04 3.17 -2601.03 -2595.85 -2593.57 -2591.65
+                     97.5% n_eff Rhat
+    bm_dept[1]       -0.27  6918    1
+    bm_dept[2]        0.46  9133    1
+    bm_dept[3]        0.36 13016    1
+    bm_dept[4]        0.19 12258    1
+    bm_dept[5]        0.49 12953    1
+    bm_dept[6]        0.40 12011    1
+    a_dept[1]         1.81  6993    1
+    a_dept[2]         1.39  9335    1
+    a_dept[3]        -0.48 13489    1
+    a_dept[4]        -0.42 12595    1
+    a_dept[5]        -0.91 14659    1
+    a_dept[6]        -2.23 13168    1
+    a                 0.96  9541    1
+    bm                0.31  8946    1
+    sigma_dept[1]     3.27  9058    1
+    sigma_dept[2]     1.15  6626    1
+    Rho[1,1]          1.00   NaN  NaN
+    Rho[1,2]          0.44 11358    1
+    Rho[2,1]          0.44 11358    1
+    Rho[2,2]          1.00 16069    1
+    lp__          -2588.70  5310    1    
+&quot;&quot;&quot;</span>
+
+chns |&gt; display</code></pre> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 01, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->
