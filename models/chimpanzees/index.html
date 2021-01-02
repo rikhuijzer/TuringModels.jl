@@ -1,0 +1,33 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Chimpanzees</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Chimpanzees</h1> </div> <div class=franklin-content > <pre><code class="julia hljs"><span class=hljs-keyword >using</span> TuringModels, StatsFuns
+
+delim=<span class=hljs-string >&#x27;;&#x27;</span>
+d = CSV.read(joinpath(<span class=hljs-meta >@__DIR__</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;data&quot;</span>, <span class=hljs-string >&quot;chimpanzees.csv&quot;</span>), DataFrame; delim);
+size(d) <span class=hljs-comment ># Should be 504x8</span>
+
+<span class=hljs-comment ># pulled_left, condition, prosoc_left</span>
+<span class=hljs-meta >@model</span> m10_3(y, x₁, x₂) = <span class=hljs-keyword >begin</span>
+    α ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
+    βp ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
+    βpC ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
+
+    logits = α .+ (βp .+ βpC * x₁) .* x₂
+    y .~ BinomialLogit.(<span class=hljs-number >1</span>, logits)
+<span class=hljs-keyword >end</span>;
+
+chns = sample(m10_3(d[:,:pulled_left], d[:,:condition], d[:,:prosoc_left]),
+  Turing.NUTS(<span class=hljs-number >0.65</span>), <span class=hljs-number >2000</span>);
+
+<span class=hljs-comment ># Rethinking result</span>
+
+m_10_03t_result = <span class=hljs-string >&quot;
+      Mean StdDev lower 0.89 upper 0.89 n_eff Rhat
+ a    0.05   0.13      -0.15       0.25  3284    1
+ bp   0.62   0.22       0.28       0.98  3032    1
+ bpC -0.11   0.26      -0.53       0.29  3184    1
+&quot;</span>;
+
+<span class=hljs-comment ># Describe the draws</span>
+
+chns |&gt; display
+
+<span class=hljs-comment ># End of m10.03t.jl</span></code></pre> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 02, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->

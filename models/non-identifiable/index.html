@@ -1,0 +1,54 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Non-identifiable model</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Non-identifiable model</h1> </div> <div class=franklin-content > <div class=franklin-toc ><ol><li><a href="#data">Data</a><li><a href="#model">Model</a><li><a href="#output">Output</a><li><a href="#original_output">Original output</a></ol></div> <h2 id=data ><a href="#data">Data</a></h2> <pre><code class="julia hljs">y = rand(Normal(<span class=hljs-number >0</span>,<span class=hljs-number >1</span>), <span class=hljs-number >100</span>);</code></pre>
+<h2 id=model ><a href="#model">Model</a></h2>
+<pre><code class="julia hljs"><span class=hljs-keyword >using</span> Turing
+
+<span class=hljs-comment ># Can&#x27;t really set a Uniform[-Inf,Inf] on σ </span>
+
+<span class=hljs-meta >@model</span> m8_4(y) = <span class=hljs-keyword >begin</span>
+    α₁ ~ Uniform(-<span class=hljs-number >3000</span>, <span class=hljs-number >1000</span>)
+    α₂ ~ Uniform(-<span class=hljs-number >1000</span>, <span class=hljs-number >3000</span>)
+    σ ~ truncated(Cauchy(<span class=hljs-number >0</span>,<span class=hljs-number >1</span>), <span class=hljs-number >0</span>, <span class=hljs-literal >Inf</span>)
+
+    y .~ Normal(α₁ + α₂, σ)
+<span class=hljs-keyword >end</span>
+
+chains = sample(m8_4(y), NUTS(<span class=hljs-number >0.65</span>), <span class=hljs-number >2000</span>)</code></pre>
+<pre><code class="plaintext hljs">UndefVarError: y not defined
+</code></pre>
+<h2 id=output ><a href="#output">Output</a></h2>
+
+
+<pre><code class="julia hljs"><span class=hljs-keyword >using</span> StatsPlots
+
+StatsPlots.plot(chains)</code></pre>
+<p><pre><code class="plaintext hljs">chains is not a Function, or is not defined at any of the values [-5.0, -1.0, 0.0, 0.01]
+</code></pre> <p><span style="color:red;">// Image matching '/assets/models/non-identifiable/code/chains.svg' not found. //</span></p></p>
+<pre><code class="julia hljs">describe(chains)[<span class=hljs-number >1</span>]</code></pre><pre><code class="plaintext hljs">MethodError: no method matching describe(::IOStream, ::typeof(MCMCChains.chains))
+Closest candidates are:
+  describe(::IO, !Matched::AbstractArray{T,N} where N) where T&lt;:Union{Missing, Real} at /home/runner/.julia/packages/StatsBase/EA8Mh/src/scalarstats.jl:652
+  describe(::IO, !Matched::AbstractArray) at /home/runner/.julia/packages/StatsBase/EA8Mh/src/scalarstats.jl:656
+  describe(::IO, !Matched::MCMCChains.Chains; q, etype, kwargs...) at /home/runner/.julia/packages/MCMCChains/ic1pq/src/stats.jl:161
+  ...
+</code></pre>
+<pre><code class="julia hljs">describe(chains)[<span class=hljs-number >2</span>]</code></pre><pre><code class="plaintext hljs">MethodError: no method matching describe(::IOStream, ::typeof(MCMCChains.chains))
+Closest candidates are:
+  describe(::IO, !Matched::AbstractArray{T,N} where N) where T&lt;:Union{Missing, Real} at /home/runner/.julia/packages/StatsBase/EA8Mh/src/scalarstats.jl:652
+  describe(::IO, !Matched::AbstractArray) at /home/runner/.julia/packages/StatsBase/EA8Mh/src/scalarstats.jl:656
+  describe(::IO, !Matched::MCMCChains.Chains; q, etype, kwargs...) at /home/runner/.julia/packages/MCMCChains/ic1pq/src/stats.jl:161
+  ...
+</code></pre>
+<h2 id=original_output ><a href="#original_output">Original output</a></h2>
+<pre><code class="julia hljs">mean      sd     <span class=hljs-number >5.5</span>%   <span class=hljs-number >94.5</span>% n_eff Rhat
+ a1    -<span class=hljs-number >861.15</span> <span class=hljs-number >558.17</span> -<span class=hljs-number >1841.89</span>  -<span class=hljs-number >31.04</span>     <span class=hljs-number >7</span> <span class=hljs-number >1.43</span>
+ a2     <span class=hljs-number >861.26</span> <span class=hljs-number >558.17</span>    <span class=hljs-number >31.31</span> <span class=hljs-number >1842.00</span>     <span class=hljs-number >7</span> <span class=hljs-number >1.43</span>
+ sigma    <span class=hljs-number >0.97</span>   <span class=hljs-number >0.07</span>     <span class=hljs-number >0.89</span>    <span class=hljs-number >1.09</span>     <span class=hljs-number >9</span> <span class=hljs-number >1.17</span></code></pre>
+<div class=page-foot >
+  <div class=copyright >
+    <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors.
+    Last modified: January 02, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div>
+    </div> 
+    </div> 
+    </div> <!-- end of class page-wrap-->

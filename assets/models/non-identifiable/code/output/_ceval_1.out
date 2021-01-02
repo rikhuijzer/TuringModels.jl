@@ -1,0 +1,6 @@
+MethodError: no method matching describe(::IOStream, ::typeof(MCMCChains.chains))
+Closest candidates are:
+  describe(::IO, !Matched::AbstractArray{T,N} where N) where T<:Union{Missing, Real} at /home/runner/.julia/packages/StatsBase/EA8Mh/src/scalarstats.jl:652
+  describe(::IO, !Matched::AbstractArray) at /home/runner/.julia/packages/StatsBase/EA8Mh/src/scalarstats.jl:656
+  describe(::IO, !Matched::MCMCChains.Chains; q, etype, kwargs...) at /home/runner/.julia/packages/MCMCChains/ic1pq/src/stats.jl:161
+  ...
