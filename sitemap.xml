@@ -2,44 +2,56 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/varying-intercepts-admission/index.html</loc>
-    <lastmod>2021-01-01</lastmod>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/basic-example/index.html</loc>
+    <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/height/index.html</loc>
-    <lastmod>2021-01-01</lastmod>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/globe-tossing/index.html</loc>
+    <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/multinomial-poisson/index.html</loc>
-    <lastmod>2021-01-01</lastmod>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/varying-intercepts-admission/index.html</loc>
+    <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/varying-slopes-cafe/index.html</loc>
-    <lastmod>2021-01-01</lastmod>
+    <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/404/index.html</loc>
-    <lastmod>2021-01-01</lastmod>
+    <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/index.html</loc>
-    <lastmod>2021-01-01</lastmod>
+    <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/index.html</loc>
-    <lastmod>2021-01-01</lastmod>
+    <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>

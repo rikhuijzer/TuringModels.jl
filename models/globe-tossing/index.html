@@ -1,0 +1,23 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Globe tossing</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Globe tossing</h1> </div> <div class=franklin-content > <p><div class=franklin-toc ><ol><li><a href="#data">Data</a><li><a href="#model">Model</a></ol></div> </p> <h2 id=data ><a href="#data">Data</a></h2> <pre><code class="julia hljs">k = <span class=hljs-number >6</span>
+n = <span class=hljs-number >9</span></code></pre> <h2 id=model ><a href="#model">Model</a></h2> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> DataFrames
+<span class=hljs-keyword >using</span> Turing
+
+<span class=hljs-meta >@model</span> <span class=hljs-keyword >function</span> globe_toss(n, k)
+  θ ~ Beta(<span class=hljs-number >1</span>, <span class=hljs-number >1</span>) <span class=hljs-comment ># prior</span>
+  k ~ Binomial(n, θ) <span class=hljs-comment ># model</span>
+  <span class=hljs-keyword >return</span> k, θ
+<span class=hljs-keyword >end</span>
+
+chains = sample(globe_toss(n, k), NUTS(<span class=hljs-number >0.65</span>), <span class=hljs-number >1000</span>)</code></pre> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> StatsPlots
+
+StatsPlots.plot(chains)</code></pre> <p> <img src="/TuringModels.jl/assets/models/globe-tossing/code/output/chains.svg" alt=""></p> <pre><code class="julia hljs">describe(chains)[<span class=hljs-number >1</span>]</code></pre><pre><code class="plaintext hljs">Summary Statistics
+  parameters      mean       std   naive_se      mcse        ess      rhat
+      Symbol   Float64   Float64    Float64   Float64    Float64   Float64
+
+           θ    0.6395    0.1362     0.0043    0.0068   591.9766    0.9991
+</code></pre> <pre><code class="julia hljs">describe(chains)[<span class=hljs-number >2</span>]</code></pre><pre><code class="plaintext hljs">Quantiles
+  parameters      2.5%     25.0%     50.0%     75.0%     97.5%
+      Symbol   Float64   Float64   Float64   Float64   Float64
+
+           θ    0.3457    0.5458    0.6463    0.7368    0.8654
+</code></pre> <h1 id=show_the_hpd_region ><a href="#show_the_hpd_region">Show the hpd region</a></h1> <p>hpd&#40;chns, alpha&#61;0.055&#41; |&gt; display</p> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 02, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->

@@ -1,0 +1,42 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Basic Example</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Basic Example</h1> </div> <div class=franklin-content > <div class=franklin-toc ><ol><li><a href="#model_definition">Model definition</a><li><a href="#output">Output</a></ol></div> <h2 id=model_definition ><a href="#model_definition">Model definition</a></h2> <p>We define a simple Normal model with unknown mean and variance.</p> <pre><code class="julia hljs"><span class=hljs-keyword >import</span> CSV
+
+<span class=hljs-keyword >using</span> DataFrames
+<span class=hljs-keyword >using</span> StatsPlots
+<span class=hljs-keyword >using</span> Turing
+
+<span class=hljs-meta >@model</span> gdemo(x, y) = <span class=hljs-keyword >begin</span>
+  s ~ InverseGamma(<span class=hljs-number >2</span>, <span class=hljs-number >3</span>)
+  m ~ Normal(<span class=hljs-number >0</span>, sqrt(s))
+  x ~ Normal(m, sqrt(s))
+  y ~ Normal(m, sqrt(s))
+<span class=hljs-keyword >end</span></code></pre> <p>and run the sampler:</p> <pre><code class="julia hljs">chains = sample(gdemo(<span class=hljs-number >1.5</span>, <span class=hljs-number >2</span>), NUTS(<span class=hljs-number >0.65</span>), <span class=hljs-number >1000</span>)</code></pre>
+<h2 id=output ><a href="#output">Output</a></h2>
+<p>The results are</p>
+
+
+<pre><code class="julia hljs">StatsPlots.plot(chains)</code></pre>
+<p> <img src="/TuringModels.jl/assets/models/basic-example/code/output/height.svg" alt=""></p>
+<pre><code class="julia hljs">describe(chains)[<span class=hljs-number >1</span>]</code></pre><pre><code class="plaintext hljs">Summary Statistics
+  parameters      mean       std   naive_se      mcse        ess      rhat
+      Symbol   Float64   Float64    Float64   Float64    Float64   Float64
+
+           m    1.1933    0.7790     0.0246    0.0256   707.3295    0.9991
+           s    1.9356    1.5920     0.0503    0.1000   353.7708    1.0007
+</code></pre>
+<pre><code class="julia hljs">describe(chains)[<span class=hljs-number >2</span>]</code></pre><pre><code class="plaintext hljs">Quantiles
+  parameters      2.5%     25.0%     50.0%     75.0%     97.5%
+      Symbol   Float64   Float64   Float64   Float64   Float64
+
+           m   -0.2358    0.7131    1.2091    1.6648    2.6676
+           s    0.5850    1.0210    1.4718    2.3658    5.6941
+</code></pre>
+<div class=page-foot >
+  <div class=copyright >
+    <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors.
+    Last modified: January 02, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div>
+    </div> 
+    </div> 
+    </div> <!-- end of class page-wrap-->
