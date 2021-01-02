@@ -8,7 +8,7 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/basic-example/index.html</loc>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/weakly-informative-priors/index.html</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -26,19 +26,7 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/multinomial-poisson/index.html</loc>
-    <lastmod>2021-01-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/varying-intercepts-admission/index.html</loc>
-    <lastmod>2021-01-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/varying-slopes-cafe/index.html</loc>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/wild-chain/index.html</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -50,13 +38,37 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://rikhuijzer.github.io/TuringModels.jl/index.html</loc>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/index.html</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/index.html</loc>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/varying-intercepts-admission/index.html</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/basic-example/index.html</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/multinomial-poisson/index.html</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/varying-slopes-cafe/index.html</loc>
+    <lastmod>2021-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/index.html</loc>
     <lastmod>2021-01-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

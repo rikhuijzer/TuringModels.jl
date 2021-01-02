@@ -12,8 +12,7 @@ df = CSV.read(data_path, DataFrame)
 
 df.log_gdp = [log(x) for x in df.rgdppc_2000]
 
-# When this (https://github.com/JuliaData/DataFrames.jl/pull/1546) hits DataFrame it'll be conceptually easier: i.e., completecases!(d, :rgdppc_2000)
-
+TODO = "Replace by dropmissing or something similar."
 notisnan(e) = !ismissing(e)
 df = df[map(notisnan, df[:, :rgdppc_2000]), :];
 
