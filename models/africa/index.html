@@ -1,0 +1,55 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Model</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Model</h1> </div> <div class=franklin-content ><p>&#43;&#43;&#43; title &#61; &quot;Africa&quot; &#43;&#43;&#43;</p> <p>This is the first model in Statistical Rethinking Edition 1 &#40;pp. 249&#41; using Stan.</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> DataFrames
+<span class=hljs-keyword >using</span> Distributions
+<span class=hljs-keyword >using</span> Turing
+
+<span class=hljs-keyword >import</span> CSV
+
+data_path = joinpath(TuringModels.project_root, <span class=hljs-string >&quot;data&quot;</span>, <span class=hljs-string >&quot;rugged.csv&quot;</span>)
+df = CSV.read(data_path, DataFrame)
+
+df.log_gdp = [log(x) <span class=hljs-keyword >for</span> x <span class=hljs-keyword >in</span> df.rgdppc_2000]
+
+<span class=hljs-comment ># When this (https://github.com/JuliaData/DataFrames.jl/pull/1546) hits DataFrame it&#x27;ll be conceptually easier: i.e., completecases!(d, :rgdppc_2000)</span>
+
+notisnan(e) = !ismissing(e)
+df = df[map(notisnan, df[:, :rgdppc_2000]), :];
+
+df = select(df, :log_gdp, :rugged, :cont_africa)</code></pre> <p>DataFrame <code>df</code> is shown in <a href="#appendix_i">Appendix I</a>.</p> <h2 id=model ><a href="#model">Model</a></h2> <pre><code class="julia hljs"><span class=hljs-meta >@model</span> <span class=hljs-keyword >function</span> model_fn(y, x₁, x₂)
+  σ ~ truncated(Cauchy(<span class=hljs-number >0</span>, <span class=hljs-number >2</span>), <span class=hljs-number >0</span>, <span class=hljs-literal >Inf</span>)
+  βAR ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
+  βR ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
+  βA ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
+  α ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >100</span>)
+
+  μ = α .+ βR * x₁ .+ βA * x₂ .+ βAR * x₁ .* x₂
+  y .~ Normal.(μ, σ)
+<span class=hljs-keyword >end</span>
+
+model = model_fn(df.log_gdp, df.rugged, df.cont_africa)
+chains = sample(model, NUTS(<span class=hljs-number >0.65</span>), <span class=hljs-number >1000</span>)</code></pre> <pre><code class="plaintext hljs">LoadError: UndefVarError: @model not defined
+in expression starting at none:1
+</code></pre> <h2 id=output ><a href="#output">Output</a></h2> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> StatsPlots
+
+StatsPlots.plot(chains)</code></pre> <p><pre><code class="plaintext hljs">UndefVarError: chains not defined
+</code></pre> <p><span style="color:red;">// Image matching '/assets/models/africa/code/chains.svg' not found. //</span></p></p> <pre><code class="julia hljs">describe(chains)[<span class=hljs-number >1</span>]</code></pre><pre><code class="plaintext hljs">UndefVarError: chains not defined
+</code></pre> <pre><code class="julia hljs">describe(chains)[<span class=hljs-number >2</span>]</code></pre><pre><code class="plaintext hljs">UndefVarError: chains not defined
+</code></pre> <h2 id=original_output ><a href="#original_output">Original output</a></h2> <pre><code class="julia hljs">Iterations = <span class=hljs-number >1</span>:<span class=hljs-number >1000</span>
+Thinning interval = <span class=hljs-number >1</span>
+Chains = <span class=hljs-number >1</span>,<span class=hljs-number >2</span>,<span class=hljs-number >3</span>,<span class=hljs-number >4</span>
+Samples per chain = <span class=hljs-number >1000</span>
+
+Empirical Posterior Estimates:
+          Mean         SD       Naive SE       MCSE      ESS
+    a  <span class=hljs-number >9.22360053</span> <span class=hljs-number >0.139119116</span> <span class=hljs-number >0.0021996664</span> <span class=hljs-number >0.0034632816</span> <span class=hljs-number >1000</span>
+   bR -<span class=hljs-number >0.20196346</span> <span class=hljs-number >0.076106388</span> <span class=hljs-number >0.0012033477</span> <span class=hljs-number >0.0018370185</span> <span class=hljs-number >1000</span>
+   bA -<span class=hljs-number >1.94430980</span> <span class=hljs-number >0.227080488</span> <span class=hljs-number >0.0035904578</span> <span class=hljs-number >0.0057840746</span> <span class=hljs-number >1000</span>
+  bAR  <span class=hljs-number >0.39071684</span> <span class=hljs-number >0.131889143</span> <span class=hljs-number >0.0020853505</span> <span class=hljs-number >0.0032749642</span> <span class=hljs-number >1000</span>
+sigma  <span class=hljs-number >0.95036370</span> <span class=hljs-number >0.052161768</span> <span class=hljs-number >0.0008247500</span> <span class=hljs-number >0.0009204073</span> <span class=hljs-number >1000</span>
+
+Quantiles:
+          <span class=hljs-number >2.5</span>%       <span class=hljs-number >25.0</span>%       <span class=hljs-number >50.0</span>%      <span class=hljs-number >75.0</span>%        <span class=hljs-number >97.5</span>%   
+    a  <span class=hljs-number >8.95307475</span>  <span class=hljs-number >9.12719750</span>  <span class=hljs-number >9.2237750</span>  <span class=hljs-number >9.31974000</span>  <span class=hljs-number >9.490234250</span>
+   bR -<span class=hljs-number >0.35217930</span> -<span class=hljs-number >0.25334425</span> -<span class=hljs-number >0.2012855</span> -<span class=hljs-number >0.15124725</span> -<span class=hljs-number >0.054216855</span>
+   bA -<span class=hljs-number >2.39010825</span> -<span class=hljs-number >2.09894500</span> -<span class=hljs-number >1.9432550</span> -<span class=hljs-number >1.78643000</span> -<span class=hljs-number >1.513974250</span>
+  bAR  <span class=hljs-number >0.13496995</span>  <span class=hljs-number >0.30095575</span>  <span class=hljs-number >0.3916590</span>  <span class=hljs-number >0.47887625</span>  <span class=hljs-number >0.650244475</span>
+sigma  <span class=hljs-number >0.85376115</span>  <span class=hljs-number >0.91363250</span>  <span class=hljs-number >0.9484920</span>  <span class=hljs-number >0.98405750</span>  <span class=hljs-number >1.058573750</span></code></pre> <h2 id=appendix ><a href="#appendix">Appendix</a></h2> <h3 id=appendix_i ><a href="#appendix_i">Appendix I</a></h3> <p><span style="color:red;">// Table matching '/assets/models/africa/code/output/data.csv' not found. //</span></p> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 02, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->
