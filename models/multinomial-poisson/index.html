@@ -31,28 +31,28 @@ StatsPlots.plot(chains)</code></pre> <p> <img src="/TuringModels.jl/assets/model
   parameters      mean       std   naive_se      mcse         ess      rhat
       Symbol   Float64   Float64    Float64   Float64     Float64   Float64
 
-           a   -0.6050    0.6087     0.0193    0.0228    932.2373    0.9990
-   a_dept[1]    0.6760    0.1013     0.0032    0.0033    783.4265    0.9993
-   a_dept[2]    0.6351    0.1138     0.0036    0.0038    904.8380    0.9990
-   a_dept[3]   -0.5841    0.0699     0.0022    0.0027    886.1340    0.9990
-   a_dept[4]   -0.6145    0.0832     0.0026    0.0031   1045.7084    0.9995
-   a_dept[5]   -1.0568    0.0995     0.0031    0.0045   1384.1034    1.0002
-   a_dept[6]   -2.6006    0.1582     0.0050    0.0047   1107.6598    1.0031
-          bm   -0.0975    0.0804     0.0025    0.0033    685.0851    0.9990
-  sigma_dept    1.4564    0.5215     0.0165    0.0207    986.6471    1.0003
+           a   -0.6492    0.6996     0.0221    0.0353    343.9518    1.0058
+   a_dept[1]    0.6744    0.0977     0.0031    0.0041    759.8639    0.9993
+   a_dept[2]    0.6285    0.1192     0.0038    0.0068    793.1951    0.9990
+   a_dept[3]   -0.5833    0.0726     0.0023    0.0020   1399.8046    0.9992
+   a_dept[4]   -0.6176    0.0884     0.0028    0.0033   1279.1062    0.9991
+   a_dept[5]   -1.0542    0.0953     0.0030    0.0029   1291.5099    0.9992
+   a_dept[6]   -2.6103    0.1595     0.0050    0.0045   1029.6038    0.9990
+          bm   -0.0950    0.0795     0.0025    0.0044    666.9732    0.9991
+  sigma_dept    1.4898    0.6160     0.0195    0.0348    375.6574    1.0003
 </code></pre> <pre><code class="julia hljs">describe(chains)[<span class=hljs-number >2</span>]</code></pre><pre><code class="plaintext hljs">Quantiles
   parameters      2.5%     25.0%     50.0%     75.0%     97.5%
       Symbol   Float64   Float64   Float64   Float64   Float64
 
-           a   -1.8067   -0.9617   -0.5918   -0.2327    0.5575
-   a_dept[1]    0.4845    0.6092    0.6713    0.7459    0.8838
-   a_dept[2]    0.3932    0.5620    0.6353    0.7061    0.8652
-   a_dept[3]   -0.7233   -0.6314   -0.5836   -0.5375   -0.4458
-   a_dept[4]   -0.7791   -0.6698   -0.6160   -0.5579   -0.4509
-   a_dept[5]   -1.2362   -1.1254   -1.0594   -0.9883   -0.8490
-   a_dept[6]   -2.9109   -2.7015   -2.5941   -2.4954   -2.2839
-          bm   -0.2490   -0.1545   -0.0980   -0.0448    0.0626
-  sigma_dept    0.7616    1.1030    1.3541    1.6853    2.8598
+           a   -2.1166   -0.9919   -0.6224   -0.2556    0.6380
+   a_dept[1]    0.4904    0.6053    0.6784    0.7423    0.8746
+   a_dept[2]    0.3921    0.5510    0.6262    0.7138    0.8611
+   a_dept[3]   -0.7204   -0.6325   -0.5806   -0.5346   -0.4439
+   a_dept[4]   -0.8009   -0.6758   -0.6128   -0.5606   -0.4493
+   a_dept[5]   -1.2630   -1.1141   -1.0511   -0.9957   -0.8634
+   a_dept[6]   -2.9204   -2.7170   -2.6090   -2.5003   -2.3097
+          bm   -0.2485   -0.1508   -0.0954   -0.0427    0.0697
+  sigma_dept    0.7580    1.0829    1.3318    1.7224    3.1827
 </code></pre> <h2 id=original_output ><a href="#original_output">Original output</a></h2> <pre><code class="text hljs">Inference for Stan model: 359c2483e3bdbf74fd0484be27c2909b.
     3 chains, each with iter=4500; warmup=500; thin=1; 
     post-warmup draws per chain=4000, total post-warmup draws=12000.
@@ -78,4 +78,4 @@ StatsPlots.plot(chains)</code></pre> <p> <img src="/TuringModels.jl/assets/model
     a           5839    1
     bm          7137    1
     sigma_dept  4626    1
-    lp__        4200    1</code></pre> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 02, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->
+    lp__        4200    1</code></pre> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 03, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->

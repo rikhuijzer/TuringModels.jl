@@ -1,0 +1,3 @@
+ArgumentError: Package StatsFuns not found in current path:
+- Run `import Pkg; Pkg.add("StatsFuns")` to install the StatsFuns package.
+
