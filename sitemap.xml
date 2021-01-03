@@ -20,6 +20,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/oceanic-tool-complexity/index.html</loc>
+    <lastmod>2021-01-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/beta-binomial/index.html</loc>
     <lastmod>2021-01-03</lastmod>
     <changefreq>monthly</changefreq>
@@ -99,6 +105,12 @@
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/multinomial-poisson/index.html</loc>
+    <lastmod>2021-01-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/admit-reject/index.html</loc>
     <lastmod>2021-01-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

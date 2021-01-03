@@ -1,0 +1,42 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Oceanic tool complexity</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Oceanic tool complexity</h1> </div> <div class=franklin-content > <pre><code class="julia hljs"><span class=hljs-keyword >using</span> TuringModels
+
+delim = <span class=hljs-string >&#x27;;&#x27;</span>
+d = CSV.read(joinpath(<span class=hljs-meta >@__DIR__</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;data&quot;</span>, <span class=hljs-string >&quot;Kline.csv&quot;</span>), DataFrame; delim);
+size(d) <span class=hljs-comment ># Should be 10x5</span>
+
+d.log_pop = map(log, d.population)
+
+<span class=hljs-comment ># New col contact_high, set binary values 1/0 if high/low contact</span>
+d.contact_high = [contact == <span class=hljs-string >&quot;high&quot;</span> ? <span class=hljs-number >1</span> : <span class=hljs-number >0</span> <span class=hljs-keyword >for</span> contact <span class=hljs-keyword >in</span> d.contact]
+
+<span class=hljs-comment ># This is supposed to be a &quot;bad&quot; model since we take non-centered data for the</span>
+<span class=hljs-comment ># predictor log_pop</span>
+<span class=hljs-meta >@model</span> m10_10stan(total_tools, log_pop, contact_high) = <span class=hljs-keyword >begin</span>
+    α ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >100</span>)
+    βp ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>)
+    βc ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>)
+    βpc ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>)
+
+    <span class=hljs-keyword >for</span> i ∈ <span class=hljs-number >1</span>:length(total_tools)
+        λ = exp(α + βp*log_pop[i] + βc*contact_high[i] +
+            βpc*contact_high[i]*log_pop[i])
+        total_tools[i] ~ Poisson(λ)
+    <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span>;
+
+posterior = sample(m10_10stan(d[:, :total_tools], d[:, :log_pop],
+    d[:, :contact_high]), Turing.NUTS(<span class=hljs-number >0.65</span>), <span class=hljs-number >1000</span>);
+
+<span class=hljs-comment ># Rethinking result</span>
+
+m_10_10t_result = <span class=hljs-string >&quot;
+     mean   sd  5.5% 94.5% n_eff Rhat
+ a    0.94 0.37  0.36  1.53  3379    1
+ bp   0.26 0.04  0.21  0.32  3347    1
+ bc  -0.08 0.84 -1.41  1.23  2950    1
+ bpc  0.04 0.09 -0.10  0.19  2907    1
+&quot;</span>;
+
+<span class=hljs-comment ># Describe the draws</span>
+
+posterior |&gt; display</code></pre> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 03, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->
