@@ -18,18 +18,18 @@ chains = sample(m8_2(y), NUTS(<span class=hljs-number >0.65</span>), <span class
 StatsPlots.plot(chains)</code></pre>
 <p> <img src="/TuringModels.jl/assets/models/wild-chain/code/output/chains.svg" alt=""></p>
 <pre><code class="julia hljs">describe(chains)[<span class=hljs-number >1</span>]</code></pre><pre><code class="plaintext hljs">Summary Statistics
-  parameters          mean            std     naive_se         mcse        ess      rhat
-      Symbol       Float64        Float64      Float64      Float64    Float64   Float64
+  parameters          mean            std     naive_se          mcse        ess      rhat
+      Symbol       Float64        Float64      Float64       Float64    Float64   Float64
 
-           α    18621.3508     42344.2499    1339.0428   10813.4658    16.5743    1.0118
-           σ   153368.5421   1762179.2655   55725.0012   98722.2863   542.9455    1.0000
+           α      357.1804      7744.5245     244.9034     1147.4572    49.4877    1.0029
+           σ   160525.9497   2055947.6940   65014.7746   146667.1291   199.0781    1.0039
 </code></pre>
 <pre><code class="julia hljs">describe(chains)[<span class=hljs-number >2</span>]</code></pre><pre><code class="plaintext hljs">Quantiles
-  parameters         2.5%       25.0%       50.0%        75.0%         97.5%
-      Symbol      Float64     Float64     Float64      Float64       Float64
+  parameters          2.5%       25.0%      50.0%       75.0%         97.5%
+      Symbol       Float64     Float64    Float64     Float64       Float64
 
-           α   -9727.4309   -105.9452    346.6297   12811.3307   136353.2879
-           σ      27.2993    530.2635   4785.2104   48658.0521   664801.8547
+           α   -12770.4788   -153.1746    -0.8102    123.3784    18566.4796
+           σ       18.6480     58.2367   325.5210   3759.7175   232458.5519
 </code></pre>
 <div class=page-foot >
   <div class=copyright >

@@ -11,10 +11,10 @@ Summary Statistics
   parameters      mean       std   naive_se      mcse        ess      rhat
       Symbol   Float64   Float64    Float64   Float64    Float64   Float64
 
-           θ    0.6375    0.1417     0.0045    0.0073   320.1926    1.0105
+           θ    0.6391    0.1421     0.0045    0.0043   650.2313    1.0003
 
 Quantiles
   parameters      2.5%     25.0%     50.0%     75.0%     97.5%
       Symbol   Float64   Float64   Float64   Float64   Float64
 
-           θ    0.3467    0.5397    0.6436    0.7444    0.8789
+           θ    0.3485    0.5355    0.6417    0.7521    0.8829

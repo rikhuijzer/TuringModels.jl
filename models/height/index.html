@@ -29,17 +29,17 @@ chains = sample(line(x, y), NUTS(<span class=hljs-number >0.65</span>), <span cl
   parameters       mean       std   naive_se      mcse         ess      rhat
       Symbol    Float64   Float64    Float64   Float64     Float64   Float64
 
-       alpha   154.5913    0.2651     0.0084    0.0064   1703.2505    0.9995
-        beta     0.9035    0.0414     0.0013    0.0009   1665.8799    0.9993
-       sigma     5.1033    0.1927     0.0061    0.0071   1331.0377    0.9993
+       alpha   154.5920    0.2788     0.0088    0.0046   1397.9934    0.9991
+        beta     0.9048    0.0411     0.0013    0.0010   1407.1942    1.0005
+       sigma     5.1049    0.1924     0.0061    0.0067   1435.6627    0.9990
 </code></pre>
 <pre><code class="julia hljs">describe(chains)[<span class=hljs-number >2</span>]</code></pre><pre><code class="plaintext hljs">Quantiles
   parameters       2.5%      25.0%      50.0%      75.0%      97.5%
       Symbol    Float64    Float64    Float64    Float64    Float64
 
-       alpha   154.1036   154.4019   154.5872   154.7744   155.1055
-        beta     0.8233     0.8777     0.9041     0.9324     0.9847
-       sigma     4.7547     4.9736     5.0913     5.2249     5.5116
+       alpha   154.0525   154.4106   154.5850   154.7776   155.1226
+        beta     0.8238     0.8768     0.9062     0.9343     0.9895
+       sigma     4.7611     4.9767     5.0963     5.2313     5.4894
 </code></pre>
 <h2 id=original_output ><a href="#original_output">Original output</a></h2>
 <pre><code class="julia hljs">Iterations = <span class=hljs-number >1</span>:<span class=hljs-number >1000</span>
