@@ -1,0 +1,66 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/TuringModels.jl/libs/highlight/github.min.css"> <link rel=stylesheet  href="/TuringModels.jl/css/jtd.css"> <link rel=icon  href="/TuringModels.jl/assets/favicon.png"> <title>Spatial autocorrelation in Oceanic tools</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/TuringModels.jl/" class=title > TuringModels </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/TuringModels.jl/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/TuringModels.jl/models" class="menu-list-link ">Models</a> </ul> </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  target=_blank  href="/TuringModels.jl//github.com/StatisticalRethinkingJulia/TuringModels.jl">TuringModels on GitHub </a> </div> <div class=franklin-content > <h1>Spatial autocorrelation in Oceanic tools</h1> </div> <div class=franklin-content > <pre><code class="julia hljs"><span class=hljs-keyword >using</span> TuringModels
+<span class=hljs-keyword >using</span> RData
+<span class=hljs-keyword >using</span> LinearAlgebra
+
+<span class=hljs-comment ># This script requires latest LKJ bijectors support.</span>
+<span class=hljs-comment ># `] add Bijectors#master` to get latest Bijectors.</span>
+
+data_root = joinpath(<span class=hljs-meta >@__DIR__</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;..&quot;</span>, <span class=hljs-string >&quot;data&quot;</span>)
+delim = <span class=hljs-string >&quot;;&quot;</span>
+
+Kline2_path = joinpath(data_root, <span class=hljs-string >&quot;Kline2.csv&quot;</span>)
+delim = <span class=hljs-string >&quot;;&quot;</span>
+d = CSV.read(Kline2_path, DataFrame; delim)
+
+Dmat_path = joinpath(data_root, <span class=hljs-string >&quot;islandsDistMatrix.rda&quot;</span>)
+Dmat = load(Dmat_path)[<span class=hljs-string >&quot;islandsDistMatrix&quot;</span>]
+
+d.society = <span class=hljs-number >1</span>:<span class=hljs-number >10</span>
+
+<span class=hljs-meta >@model</span> m13_7(Dmat, society, logpop, total_tools) = <span class=hljs-keyword >begin</span>
+    rhosq ~ truncated(Cauchy(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>), <span class=hljs-number >0</span>, <span class=hljs-literal >Inf</span>)
+    etasq ~ truncated(Cauchy(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>), <span class=hljs-number >0</span>, <span class=hljs-literal >Inf</span>)
+    bp ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>)
+    a ~ Normal(<span class=hljs-number >0</span>, <span class=hljs-number >10</span>)
+    
+    <span class=hljs-comment ># GPL2</span>
+    SIGMA_Dmat = etasq * exp.(-rhosq * Dmat.^<span class=hljs-number >2</span>)
+    SIGMA_Dmat = SIGMA_Dmat + <span class=hljs-number >0.01</span>I
+    SIGMA_Dmat = (SIGMA_Dmat&#x27; + SIGMA_Dmat) / <span class=hljs-number >2</span>
+    g ~ MvNormal(zeros(<span class=hljs-number >10</span>), SIGMA_Dmat)
+    
+    log_lambda = a .+ g[society] .+ bp * logpop
+    
+    total_tools .~ Poisson.(exp.(log_lambda))
+<span class=hljs-keyword >end</span>
+
+chns = sample(
+    m13_7(Dmat, d.society, d.logpop, d.total_tools),
+    Turing.NUTS(<span class=hljs-number >0.65</span>),
+    <span class=hljs-number >5000</span>
+)
+
+chns |&gt; display
+
+m_13_7_rethinking = <span class=hljs-string >&quot;&quot;&quot;
+Inference for Stan model: 6422d8042e9cdd08dae2420ad26842f1.
+    4 chains, each with iter=10000; warmup=2000; thin=1; 
+    post-warmup draws per chain=8000, total post-warmup draws=32000.
+    
+            mean se_mean    sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
+    g[1]   -0.27    0.01  0.44  -1.26  -0.50  -0.24  -0.01   0.53  3278    1
+    g[2]   -0.13    0.01  0.43  -1.07  -0.34  -0.10   0.12   0.67  3144    1
+    g[3]   -0.17    0.01  0.42  -1.10  -0.37  -0.14   0.07   0.59  3096    1
+    g[4]    0.30    0.01  0.37  -0.51   0.12   0.30   0.50   1.02  3145    1
+    g[5]    0.03    0.01  0.37  -0.77  -0.15   0.04   0.22   0.72  3055    1
+    g[6]   -0.46    0.01  0.38  -1.31  -0.64  -0.42  -0.23   0.19  3306    1
+    g[7]    0.10    0.01  0.36  -0.70  -0.07   0.11   0.29   0.78  3175    1
+    g[8]   -0.26    0.01  0.37  -1.07  -0.43  -0.24  -0.06   0.40  3246    1
+    g[9]    0.23    0.01  0.35  -0.52   0.07   0.25   0.42   0.89  3302    1
+    g[10]  -0.12    0.01  0.45  -1.04  -0.36  -0.11   0.13   0.77  5359    1
+    a       1.31    0.02  1.15  -0.98   0.61   1.31   2.00   3.69  4389    1
+    bp      0.25    0.00  0.11   0.02   0.18   0.24   0.31   0.47  5634    1
+    etasq   0.34    0.01  0.53   0.03   0.10   0.20   0.39   1.52  5643    1
+    rhosq   1.52    0.09 11.82   0.03   0.16   0.39   0.96   7.96 15955    1
+    lp__  925.98    0.03  2.96 919.16 924.20 926.34 928.14 930.67  7296    1    
+&quot;&quot;&quot;</span></code></pre> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 03, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->

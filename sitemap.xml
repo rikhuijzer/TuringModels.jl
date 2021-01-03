@@ -20,6 +20,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/non-centered-chimpanzees/index.html</loc>
+    <lastmod>2021-01-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/height/index.html</loc>
     <lastmod>2021-01-03</lastmod>
     <changefreq>monthly</changefreq>
@@ -33,6 +39,12 @@
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/wild-chain/index.html</loc>
+    <lastmod>2021-01-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/ignoring-gender-admit/index.html</loc>
     <lastmod>2021-01-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -57,6 +69,12 @@
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/non-identifiable/index.html</loc>
+    <lastmod>2021-01-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/spatial-autocorrelation-oceanic/index.html</loc>
     <lastmod>2021-01-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -93,6 +111,12 @@
 </url>
 <url>
     <loc>https://rikhuijzer.github.io/TuringModels.jl/models/chimpanzees/index.html</loc>
+    <lastmod>2021-01-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://rikhuijzer.github.io/TuringModels.jl/models/multivariate-chimpanzees-priors/index.html</loc>
     <lastmod>2021-01-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

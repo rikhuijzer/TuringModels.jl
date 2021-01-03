@@ -14,10 +14,10 @@ StatsPlots.plot(chains)</code></pre> <p> <img src="/TuringModels.jl/assets/model
   parameters      mean       std   naive_se      mcse        ess      rhat
       Symbol   Float64   Float64    Float64   Float64    Float64   Float64
 
-           θ    0.6391    0.1421     0.0045    0.0043   650.2313    1.0003
+           θ    0.6316    0.1417     0.0045    0.0095   410.6416    0.9991
 </code></pre> <pre><code class="julia hljs">describe(chains)[<span class=hljs-number >2</span>]</code></pre><pre><code class="plaintext hljs">Quantiles
   parameters      2.5%     25.0%     50.0%     75.0%     97.5%
       Symbol   Float64   Float64   Float64   Float64   Float64
 
-           θ    0.3485    0.5355    0.6417    0.7521    0.8829
+           θ    0.3354    0.5298    0.6419    0.7392    0.8797
 </code></pre> <h1 id=show_the_hpd_region ><a href="#show_the_hpd_region">Show the hpd region</a></h1> <p>hpd&#40;chns, alpha&#61;0.055&#41; |&gt; display</p> <div class=page-foot > <div class=copyright > <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> Rob J Goedman and contributors. Last modified: January 03, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> </div> <!-- end of class page-wrap-->
